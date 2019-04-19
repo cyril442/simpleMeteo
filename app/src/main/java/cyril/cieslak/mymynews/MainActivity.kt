@@ -23,21 +23,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-
-
-        // VIewPager Adapter
         val adapter = MyViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(FragmentOne(), "One")
         adapter.addFragment(FragmentTwo(), "Two")
         adapter.addFragment(FragmentThree(), "Three")
         viewPager.adapter = adapter
-      //  tabs.setupWithViewPager(viewPager)
-       // var tabs  = findViewById<TableLayout>(R.id.tabs)
-      //  var tabs = findViewById<TabLayout>(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
-      //  tabs.setTabMode(TabLayout.MODE_FIXED)
-
-
 
     }
 
