@@ -1,8 +1,11 @@
 package cyril.cieslak.mymynews
 
 import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.Color.WHITE
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.annotation.ColorInt
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -22,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        // Page Adapter
         val adapter = MyViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(FragmentOne(), "One")
         adapter.addFragment(FragmentTwo(), "Two")
@@ -30,8 +33,10 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
 
+
     }
 
+    // CLASS To MANAGE the PageAdapter
     class MyViewPagerAdapter(manager : FragmentManager) : FragmentPagerAdapter(manager) {
 
         private val fragmentList : MutableList<Fragment> = ArrayList()

@@ -20,7 +20,7 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorPrimary"
             app:titleTextColor="@color/colorAccent"
             app:tabMode="fixed"
             app:tabGravity="fill"/>
