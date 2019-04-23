@@ -23,7 +23,10 @@ class FragmentThree : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        tv_fragment_three.text = "Le Fragment Three"
+
+        val fileText : String = context!!.assets.open("dataFake.json").bufferedReader().use { it.readText() }
+
+        tv_fragment_three.text = fileText
 
     }
 }

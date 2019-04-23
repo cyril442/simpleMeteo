@@ -1,21 +1,13 @@
 package cyril.cieslak.mymynews
 
-import android.content.ClipData
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import cyril.cieslak.mymynews.Fragments.FragmentTwo
-import kotlinx.android.synthetic.main.fragment_fragment_one.*
-import org.json.JSONArray
-import java.io.IOException
-import java.io.InputStream
 
-class ItemNewsAdapter(val datas : ArrayList<String>) : RecyclerView.Adapter<ItemNewsAdapter.ViewHolder>() {
+class ItemNewsAdapter(val datas: Array<String>) : RecyclerView.Adapter<ItemNewsAdapter.ViewHolder>() {
 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
