@@ -66,7 +66,6 @@ class FragmentTwo : Fragment() {
         //    readJSonTwo
         datas = parseDatasFromFake()
 
-       // datas = mutableListOf<String>("mes couilles", "font du ski", "vraiment", "ca me fait chier", "mais Grave", "tout seul dans ma merde", "ca me casse vraiment  les couilles!!", "je suis faché", "contre moi-meme", "plus que contre les autres")
         adapter =ItemNewsAdapter(datas)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_in_layout)
