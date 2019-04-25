@@ -66,6 +66,7 @@ class FragmentTwo : Fragment() {
         //    readJSonTwo
         datas = parseDatasFromFake()
 
+      //  datas = arrayListOf("ping", "pong", "bongo")
         adapter =ItemNewsAdapter(datas)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_in_layout)
