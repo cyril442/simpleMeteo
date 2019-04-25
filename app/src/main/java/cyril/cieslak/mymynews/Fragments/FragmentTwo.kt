@@ -100,7 +100,8 @@ class FragmentTwo : Fragment() {
                 val updated_date = jo.getString("updated_date")
 
                // data = TopStoryData(title, section, subsection, updated_date )
-                datas.add("$title, $section, $subsection, $updated_date")
+                val data = mutableListOf<String>(section, subsection, title, updated_date)
+               datas = data
 
 
             }
@@ -115,7 +116,7 @@ class FragmentTwo : Fragment() {
     }
 }
 
- class TopStoryData (
+  class TopStoryData (
     private var m_title : String,
     private var m_section : String,
     private var m_subsection : String,

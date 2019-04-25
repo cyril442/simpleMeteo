@@ -36,10 +36,10 @@ class ItemNewsAdapter(val datas: MutableList<String>) : RecyclerView.Adapter<Ite
 
         val data = datas[position]
         holder.icon.setImageResource(R.mipmap.ic_launcher_round)
-        holder.section.text = data
-        holder.subsection.text = data
-        holder.date.text = data
-        holder.title.text = data
+        holder.section.text = datas[0]
+        holder.subsection.text = datas[1]
+        holder.date.text = datas[3]
+        holder.title.text = datas[2]
 
     }
 
