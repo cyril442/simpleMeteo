@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import cyril.cieslak.mymynews.ItemNewsAdapter
@@ -17,7 +18,10 @@ import cyril.cieslak.mymynews.R
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_fragment_one.*
 import kotlinx.android.synthetic.main.fragment_fragment_two.*
+import kotlinx.android.synthetic.main.item_nyt.*
+import kotlinx.android.synthetic.main.item_nyt.view.*
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
@@ -25,10 +29,25 @@ import java.io.InputStream
 
 class FragmentTwo : Fragment() {
 
-    var datas = arrayOf<String>("un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix", "onze", "douze", "treize", "quatorze", "quinze")
-    val adapter = ItemNewsAdapter(datas)
+    var datas = mutableListOf<String>(
+        "un",
+        "deux",
+        "trois",
+        "quatre",
+        "cinq",
+        "six",
+        "sept",
+        "huit",
+        "neuf",
+        "dix",
+        "onze",
+        "douze",
+        "treize",
+        "quatorze",
+        "quinze"
+    )
 
-    var arr = arrayListOf<String>()
+    var adapter = ItemNewsAdapter(datas)
 
 
     override fun onCreateView(
@@ -42,7 +61,13 @@ class FragmentTwo : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-       readJSonTwo()
+
+
+        //    readJSonTwo
+        datas = parseDatasFromFake()
+
+       // datas = mutableListOf<String>("mes couilles", "font du ski", "vraiment", "ca me fait chier", "mais Grave", "tout seul dans ma merde", "ca me casse vraiment  les couilles!!", "je suis faché", "contre moi-meme", "plus que contre les autres")
+        adapter =ItemNewsAdapter(datas)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_in_layout)
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -50,41 +75,69 @@ class FragmentTwo : Fragment() {
 
     }
 
-    private fun readJSonTwo() {
+    private fun parseDatasFromFake() : MutableList<String> {
 
-        var json: String? = null
+        val inputStream: InputStream = context!!.assets!!.open("dataFake.json")
+        var json = inputStream.bufferedReader().use { it.readText() }
 
         try {
-            val inputStream: InputStream = context!!.assets!!.open("dataFake.json")
-            json = inputStream.bufferedReader().use { it.readText() }
 
-            var jsonarr = JSONArray(json)
-
-
-            for (i in 0 until  jsonarr.length()-1) {
-
-                var jsonobj = jsonarr.getJSONObject(i)
-                //arr.add(jsonobj.getString("status"))
-                arr.add(jsonobj.getString("section"))
+        var jo : JSONObject
+            datas.clear()
+        var data : TopStoryData
 
 
+            jo = JSONObject(json)
+            val ja = jo.getJSONArray("results")
+
+            for (i in 0 until ja.length()) {
+                jo = ja.getJSONObject(i)
+
+
+                val title = jo.getString("title")
+                val section = jo.getString("section")
+                val subsection = jo.getString("subsection")
+                val updated_date = jo.getString("updated_date")
+
+               // data = TopStoryData(title, section, subsection, updated_date )
+                datas.add("$title, $section, $subsection, $updated_date")
 
 
             }
 
+            return datas
 
+        } catch (e: JSONException) {
+            e.printStackTrace()
 
-
-            var adpt = ArrayAdapter(this, R.layout.item_nyt, arr)
-            recycler_view_in_layout.adapter = adpt
-
-
-
-        } catch (e: IOException) {
-            Toast.makeText(context, "Exception try", Toast.LENGTH_SHORT).show()
         }
+        return datas
+    }
+}
 
+ class TopStoryData (
+    private var m_title : String,
+    private var m_section : String,
+    private var m_subsection : String,
+    private var m_updated_date : String
+) {
+
+    fun getTitle() : String {
+        return m_title
     }
+
+    fun getSection() : String {
+        return m_section
     }
+
+    fun getSubsection() : String {
+        return m_subsection
+    }
+
+    fun getUpdated_Date() : String {
+        return m_updated_date
+    }
+}
+
 
 

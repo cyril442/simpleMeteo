@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import cyril.cieslak.mymynews.Fragments.TopStoryData
 
-class ItemNewsAdapter(val datas: Array<String>) : RecyclerView.Adapter<ItemNewsAdapter.ViewHolder>() {
+class ItemNewsAdapter(val datas: MutableList<String>) : RecyclerView.Adapter<ItemNewsAdapter.ViewHolder>() {
+
 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -15,7 +17,7 @@ class ItemNewsAdapter(val datas: Array<String>) : RecyclerView.Adapter<ItemNewsA
         val icon = itemView.findViewById<ImageView>(R.id.icon)
         val section = itemView.findViewById<TextView>(R.id.section)
         val subsection = itemView.findViewById<TextView>(R.id.subsection)
-        val date = itemView.findViewById<TextView>(R.id.date)
+       val date = itemView.findViewById<TextView>(R.id.date)
         val title = itemView.findViewById<TextView>(R.id.title)
 
 
