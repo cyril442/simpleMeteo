@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.squareup.picasso.Picasso
 import cyril.cieslak.mymynews.Fragments.TopStoryData
 
 class ItemNewsAdapter(val datas: MutableList<String>) : RecyclerView.Adapter<ItemNewsAdapter.ViewHolder>() {
@@ -35,11 +36,13 @@ class ItemNewsAdapter(val datas: MutableList<String>) : RecyclerView.Adapter<Ite
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val data = datas[position]
-        holder.icon.setImageResource(R.mipmap.ic_launcher_round)
+
+        Picasso.get().load(datas[4]).into(holder.icon)
         holder.section.text = datas[0]
         holder.subsection.text = datas[1]
         holder.date.text = datas[3]
         holder.title.text = datas[2]
+
 
     }
 
