@@ -58,6 +58,7 @@ class FragmentTwo : Fragment() {
     val jsonTopStories = "https://api.nytimes.com/svc/topstories/v2/home.json?api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -73,7 +74,8 @@ class FragmentTwo : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-  //      JSONDownloaderTopStories(context!!, jsonTopStories).execute()
+        JSONDownloaderTopStories(context!!, jsonTopStories).execute()
+
 
         //    readJSonTwo
         datas = parseDatasFromFake()
@@ -92,7 +94,8 @@ class FragmentTwo : Fragment() {
         val inputStream: InputStream = context!!.assets!!.open("dataFake.json")
         var json = inputStream.bufferedReader().use { it.readText() }
 
-     //       json = jsonTopStories
+
+
 
         try {
 
@@ -196,6 +199,7 @@ class FragmentTwo : Fragment() {
           private lateinit var pd : ProgressDialog
           lateinit var bingo : String
 
+
           // Connect to NetWork via HTTPURLConnection
           // ***
 
@@ -251,7 +255,7 @@ class FragmentTwo : Fragment() {
                           line = br.readLine()
 
                           if (line == null) {break}
-                          jsonData.append(line + "\n");
+                          jsonData.append(line + "\n")
 
                       } while(true)
 
@@ -310,14 +314,19 @@ class FragmentTwo : Fragment() {
               else{
                   // PARSE
                   Toast.makeText(c, "Network Connection and Download Succesfull. Now Attempting to Parse", Toast.LENGTH_LONG).show()
+                  bingo = jsonData
+                  Toast.makeText(c, "$bingo", Toast.LENGTH_LONG).show()
 
                   // JSONParser(c, jsonData, myGridView).execute()
               }
 
+
           }
 
 
+
       }
+
 
 
 
