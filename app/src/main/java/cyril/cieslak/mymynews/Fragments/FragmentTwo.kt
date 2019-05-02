@@ -1,7 +1,9 @@
 package cyril.cieslak.mymynews.Fragments
 
 
+import android.app.ProgressDialog
 import android.content.Context
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -14,6 +16,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import cyril.cieslak.mymynews.ItemNewsAdapter
 
+
 import cyril.cieslak.mymynews.R
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_fragment_one.*
@@ -23,10 +26,13 @@ import kotlinx.android.synthetic.main.item_nyt.view.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.IOException
-import java.io.InputStream
+import java.io.*
+import java.net.HttpURLConnection
+import java.net.MalformedURLException
+import java.net.URL
 
 
+@Suppress("UNREACHABLE_CODE")
 class FragmentTwo : Fragment() {
 
     var datas = mutableListOf<String>(
@@ -49,6 +55,8 @@ class FragmentTwo : Fragment() {
 
     var adapter = ItemNewsAdapter(datas)
 
+    val jsonTopStories = "https://api.nytimes.com/svc/topstories/v2/home.json?api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,16 +65,20 @@ class FragmentTwo : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_fragment_two, container, false)
 
+
+
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-
+  //      JSONDownloaderTopStories(context!!, jsonTopStories).execute()
 
         //    readJSonTwo
         datas = parseDatasFromFake()
 
-      //  datas = arrayListOf("ping", "pong", "bongo")
+
         adapter =ItemNewsAdapter(datas)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_in_layout)
@@ -80,6 +92,8 @@ class FragmentTwo : Fragment() {
         val inputStream: InputStream = context!!.assets!!.open("dataFake.json")
         var json = inputStream.bufferedReader().use { it.readText() }
 
+     //       json = jsonTopStories
+
         try {
 
         var jo : JSONObject
@@ -87,8 +101,13 @@ class FragmentTwo : Fragment() {
         var data : TopStoryData
 
 
+
             jo = JSONObject(json)
+
+
             val ja = jo.getJSONArray("results")
+
+
 
             for (i in 0 until ja.length()) {
                 jo = ja.getJSONObject(i)
@@ -99,9 +118,38 @@ class FragmentTwo : Fragment() {
                 val subsection = jo.getString("subsection")
                 val updated_date = jo.getString("updated_date")
 
-               // data = TopStoryData(title, section, subsection, updated_date )
-                val data = mutableListOf<String>(section, subsection, title, updated_date)
-               datas = data
+
+                val jam = jo.getJSONArray("multimedia")
+
+                for (i in 0 until jam.length()) {
+
+                    var jom = jam.getJSONObject(i)
+                    val url = jom.getString("url")
+
+
+                // data = TopStoryData(title, section, subsection, updated_date )
+                val data = mutableListOf<String>(section, subsection, title, updated_date, url)
+                datas = data
+
+//                    datas.add(title)
+//                    datas.add(section)
+//                    datas.add(subsection)
+//                    datas.add(updated_date)
+
+               // datas.addAll(0, data)
+
+        //        var addition = data
+
+//                datas.add(section.toString())
+//                datas.add(subsection.toString())
+//                datas.add(title.toString())
+//                datas.add(updated_date.toString())
+
+                         }
+
+             //   val data = TopStoryData(m_title = title, m_section = section, m_subsection = subsection, m_updated_date = updated_date)
+
+              //  datas.addAll()
 
 
             }
@@ -123,22 +171,156 @@ class FragmentTwo : Fragment() {
     private var m_updated_date : String
 ) {
 
-    fun getTitle() : String {
-        return m_title
-    }
+      fun getTitle(): String {
+          return m_title
+      }
 
-    fun getSection() : String {
-        return m_section
-    }
+      fun getSection(): String {
+          return m_section
+      }
 
-    fun getSubsection() : String {
-        return m_subsection
-    }
+      fun getSubsection(): String {
+          return m_subsection
+      }
 
-    fun getUpdated_Date() : String {
-        return m_updated_date
-    }
-}
+      fun getUpdated_Date(): String {
+          return m_updated_date
+      }
+  }
+
+
+      @Suppress ("DEPRECATION")
+      class JSONDownloaderTopStories(private var c: Context, private var jsonTopStories: String) : AsyncTask<Void, Void, String>() {
+
+
+          private lateinit var pd : ProgressDialog
+          lateinit var bingo : String
+
+          // Connect to NetWork via HTTPURLConnection
+          // ***
+
+          // ***
+          private fun connect (jsonTopStories: String) : Any {
+
+              try{
+                  val url = URL(jsonTopStories)
+                  val con = url.openConnection() as HttpURLConnection
+
+                  // Con Props
+
+                  con.requestMethod = "GET"
+                  con.connectTimeout = 15000
+                  con.readTimeout = 15000
+                  con.doInput = true
+
+                  return con
+              } catch (e: MalformedURLException){
+                  e.printStackTrace()
+                  return "URL ERROR" + e.message
+
+              } catch (e: IOException){
+                  e.printStackTrace()
+                  return "CONNECT ERROR" + e.message
+
+              }
+
+          }
+
+          // ***
+          // Download JsonData
+          // ***
+          private fun download() : String {
+
+              val connection = connect(jsonTopStories)
+              if(connection.toString().startsWith("Error")){
+                  return connection.toString()
+              }
+              // DOWNLOAD
+              try{
+                  val con = connection as HttpURLConnection
+                  // if response is HTTP OK
+                  if (con.responseCode == 200) {
+                      // GET INPUT FROM STREAM
+                      val `is` = BufferedInputStream(con.inputStream)
+                      val br = BufferedReader(InputStreamReader(`is`))
+
+                      val jsonData = StringBuffer()
+                      var line: String?
+
+                      do{
+                          line = br.readLine()
+
+                          if (line == null) {break}
+                          jsonData.append(line + "\n");
+
+                      } while(true)
+
+                      // CLOSING RESOURCES
+                      br.close()
+                      `is`.close()
+
+
+
+                      // RETURN JSON
+                      return jsonData.toString()
+
+
+                  } else{
+                      return "Error" + con.responseMessage
+                  }
+              } catch (e:IOException){
+                  e.printStackTrace()
+                  return "Error" + e.message
+              }
+
+
+          }
+
+          // SHOW DIALOG WHILE DOWNLOADING DATAS
+          override fun onPreExecute() {
+              super.onPreExecute()
+
+              pd = ProgressDialog(c)
+              pd.setTitle("Download Json")
+              pd.setMessage("Downloading... Please wait...")
+              pd.show()
+          }
+
+          // DOWNLOADING IN BACKGROUND
+          override fun doInBackground(vararg Voids: Void): String {
+              return download()
+          }
+
+          // When BACKGROUNDWORK is finished, Dismiss Dialog and Pass Datas to JSONParser
+          override fun onPostExecute(jsonData: String) {
+              super.onPostExecute(jsonData)
+
+              pd.dismiss()
+              if(jsonData.startsWith("URL ERROR")){
+                  val error = jsonData
+                  Toast.makeText(c, error, Toast.LENGTH_LONG).show()
+                  Toast.makeText(c, "MOST PROBABLY THE APP CANNOT CONNECT DUE TO WRONG URL SINCE MALFORMEDURLEXCEPTION WAS RAISED", Toast.LENGTH_LONG).show()
+
+              } else if(jsonData.startsWith("CONNECT ERROR")) {
+                  val error = jsonData
+                  Toast.makeText(c, error, Toast.LENGTH_LONG).show()
+                  Toast.makeText(c, "MOST PROBABLY THE APP CANNOT CONNECT TO ANY NETWORK SINCE IOEXCEPTION WAS RAISED", Toast.LENGTH_LONG).show()
+
+              }
+              else{
+                  // PARSE
+                  Toast.makeText(c, "Network Connection and Download Succesfull. Now Attempting to Parse", Toast.LENGTH_LONG).show()
+
+                  // JSONParser(c, jsonData, myGridView).execute()
+              }
+
+          }
+
+
+      }
+
+
+
 
 
 
