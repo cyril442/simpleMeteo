@@ -113,13 +113,9 @@ class FragmentTwo : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             datas.clear()
             var data: TopStoryData
 
-
-
             jo = JSONObject(json)
 
-
             val ja = jo.getJSONArray("results")
-
 
 
             for (i in 0 until ja.length()) {
@@ -131,41 +127,38 @@ class FragmentTwo : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 val subsection = jo.getString("subsection")
                 val updated_date = jo.getString("updated_date")
 
+                //***--- PREPARATION OF THE SUBSECTION TO PRINT with a " > " before the texte to print---***//
+                var subsectionReadyToPrint : String
+                when (subsection) {
+                    "" ->  subsectionReadyToPrint = subsection
+                    else -> subsectionReadyToPrint = " > $subsection" }
+                //***--------------------------------***//
 
-
+                //***--- FORMATTING THE DATE ---***//
+                var date10char = updated_date.take(10)
+                var date7char = updated_date.take(7)
+                var dateYear = date10char.take(4)
+                var dateMonth = date7char.takeLast(2)
+                var dateDay = date10char.takeLast(2)
+                var dateToPrint = "$dateDay/$dateMonth/$dateYear"
+                //***--------------------------------***//
 
 
                 val jam = jo.getJSONArray("multimedia")
                 var jom = jam[0] as JSONObject
                 var url = jom.getString("url")
 
+                //***--- GET AN IMAGE EVEN WHEN MULTIMEDIA IS EMPTY  ---**//
+                var urlToPrint : String
+                when (url) {
+                    "" -> urlToPrint = "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
+                    else -> urlToPrint = url }
+             //   [URL=https://s5.photobucket.com/user/courtney210/media/wave-bashful_zps5ab77563.jpg.html][IMG]https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg[/IMG][/URL]
+                //***--------------------------------***//
 
-              //  when ( jom.isNull("jom") == true) -> {}
-//                when (jam.length()){
-//                    in 0..1 -> url = "https://static01.nyt.com/images/2019/04/27/business/27apple/27apple-thumbStandard.jpg"
-//                    }
-
-                val data = mutableListOf<String>(section, subsection, title, updated_date, url)
+                val data = mutableListOf<String>(section, subsectionReadyToPrint, title, dateToPrint, urlToPrint)
                 datas.add(data)
 
-//                    datas.add(title)
-//                    datas.add(section)
-//                    datas.add(subsection)
-//                    datas.add(updated_date)
-
-                // datas.addAll(0, data)
-
-                //        var addition = data
-
-//                datas.add(section.toString())
-//                datas.add(subsection.toString())
-//                datas.add(title.toString())
-//                datas.add(updated_date.toString())
-
-
-                //   val data = TopStoryData(m_title = title, m_section = section, m_subsection = subsection, m_updated_date = updated_date)
-
-                //  datas.addAll()
 
 
             }
