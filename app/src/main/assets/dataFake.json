@@ -827,7 +827,7 @@
       "geo_facet": [],
       "multimedia": [
         {
-          "url": "https://static01.nyt.com/images/2019/04/27/business/27apple/27apple-thumbStandard.jpg",
+          "url": "",
           "format": "Standard Thumbnail",
           "height": 75,
           "width": 75,
@@ -835,7 +835,7 @@
           "subtype": "illustration",
           "caption": "",
           "copyright": "Chris Gash"
-        }
+        },
       ],
       "short_url": "https://nyti.ms/2vopZY4"
     }
