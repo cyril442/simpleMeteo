@@ -1,22 +1,15 @@
 package cyril.cieslak.mymynews
 
 import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.Color.WHITE
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.annotation.ColorInt
-import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.widget.TableLayout
-import android.widget.TextView
-import cyril.cieslak.mymynews.Fragments.FragmentOne
-import cyril.cieslak.mymynews.Fragments.FragmentThree
-import cyril.cieslak.mymynews.Fragments.FragmentTwo
+import cyril.cieslak.mymynews.Fragments.FragmentMostPopular
+import cyril.cieslak.mymynews.Fragments.FragmentTopStories
+import cyril.cieslak.mymynews.Fragments.FragmentSports
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,9 +20,9 @@ class MainActivity : AppCompatActivity() {
 
         // Page Adapter
         val adapter = MyViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(FragmentOne(), "One")
-        adapter.addFragment(FragmentTwo(), "Two")
-        adapter.addFragment(FragmentThree(), "Three")
+        adapter.addFragment(FragmentTopStories(), "Top Stories")
+        adapter.addFragment(FragmentMostPopular(), "Most Popular")
+        adapter.addFragment(FragmentSports(), "Sports")
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
 

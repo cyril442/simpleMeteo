@@ -26,7 +26,7 @@ import java.net.URL
 
 
 @Suppress("UNREACHABLE_CODE")
-class FragmentTwo : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
     var datas = mutableListOf(
