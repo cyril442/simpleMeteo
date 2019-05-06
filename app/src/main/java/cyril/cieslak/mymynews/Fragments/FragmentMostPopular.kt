@@ -63,7 +63,7 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     ): View? {
 
         var theview = inflater.inflate(R.layout.fragment_fragment_most_popular, container, false)
-        swipeRefreshLayout = theview.findViewById(R.id.swiperefresh)
+        swipeRefreshLayout = theview.findViewById(R.id.swiperefreshmostpopular)
         swipeRefreshLayout.setOnRefreshListener(this)
 
         // Inflate the layout for this fragment
@@ -83,7 +83,7 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         adapter = ItemNewsAdapter(datas)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_in_layout)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_in_layout_most_popular)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
 
@@ -94,7 +94,7 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val inputStream: InputStream = context!!.assets!!.open("dataFake.json")
         var json = inputStream.bufferedReader().use { it.readText() }
 
-  //      json = jsonDataPreview
+       json = jsonDataPreview
 
 
         try {
