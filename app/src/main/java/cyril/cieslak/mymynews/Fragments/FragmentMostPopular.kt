@@ -3,7 +3,6 @@ package cyril.cieslak.mymynews.Fragments
 
 import android.app.ProgressDialog
 import android.content.Context
-import android.media.tv.TvContract
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -13,27 +12,17 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import cyril.cieslak.mymynews.ItemNewsAdapter
 
 
 import cyril.cieslak.mymynews.R
-import kotlinx.android.synthetic.*
-import kotlinx.android.synthetic.main.fragment_fragment_one.*
-import kotlinx.android.synthetic.main.fragment_fragment_two.*
-import kotlinx.android.synthetic.main.item_nyt.*
-import kotlinx.android.synthetic.main.item_nyt.view.*
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
-
-import java.util.*
 
 
 @Suppress("UNREACHABLE_CODE")
@@ -64,6 +53,7 @@ class FragmentTwo : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     val jsonTopStories = "https://api.nytimes.com/svc/topstories/v2/home.json?api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
 
+
     lateinit var swipeRefreshLayout : SwipeRefreshLayout
 
 
@@ -72,7 +62,7 @@ class FragmentTwo : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         savedInstanceState: Bundle?
     ): View? {
 
-        var theview = inflater.inflate(R.layout.fragment_fragment_two, container, false)
+        var theview = inflater.inflate(R.layout.fragment_fragment_most_popular, container, false)
         swipeRefreshLayout = theview.findViewById(R.id.swiperefresh)
         swipeRefreshLayout.setOnRefreshListener(this)
 
@@ -104,7 +94,7 @@ class FragmentTwo : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val inputStream: InputStream = context!!.assets!!.open("dataFake.json")
         var json = inputStream.bufferedReader().use { it.readText() }
 
-        json = jsonDataPreview
+  //      json = jsonDataPreview
 
 
         try {
