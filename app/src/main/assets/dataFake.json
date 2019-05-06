@@ -244,34 +244,6 @@
       "short_url": "https://nyti.ms/2XVGrvb"
     },
     {
-      "section": "Business",
-      "subsection": "",
-      "title": "Times Apologizes for Publishing Anti-Semitic Cartoon",
-      "abstract": "The cartoon, which ran in the Opinion pages of the international edition, drew widespread condemnation. “It was an error of judgment to publish it,” a Times spokeswoman said.",
-      "url": "https://www.nytimes.com/2019/04/28/business/ny-times-anti-semitic-cartoon.html",
-      "byline": "By STACY COWLEY",
-      "item_type": "Article",
-      "updated_date": "2019-04-28T19:37:48-04:00",
-      "created_date": "2019-04-28T19:05:58-04:00",
-      "published_date": "2019-04-28T19:05:58-04:00",
-      "material_type_facet": "",
-      "kicker": "",
-      "des_facet": [
-        "Cartoons and Cartoonists",
-        "Anti-Semitism",
-        "Newspapers",
-        "Discrimination",
-        "Apologies"
-      ],
-      "org_facet": [
-        "New York Times"
-      ],
-      "per_facet": [],
-      "geo_facet": [],
-      "multimedia": [],
-      "short_url": "https://nyti.ms/2vopZY4"
-    },
-    {
       "section": "U.S.",
       "subsection": "",
       "title": "Man in Custody in Connection With 7 Killings in Tennessee, Police Say",
@@ -827,6 +799,45 @@
         }
       ],
       "short_url": "https://nyti.ms/2Wayu4O"
+    },
+    {
+      "section": "Business",
+      "subsection": "",
+      "title": "Times Apologizes for Publishing Anti-Semitic Cartoon",
+      "abstract": "The cartoon, which ran in the Opinion pages of the international edition, drew widespread condemnation. “It was an error of judgment to publish it,” a Times spokeswoman said.",
+      "url": "https://www.nytimes.com/2019/04/28/business/ny-times-anti-semitic-cartoon.html",
+      "byline": "By STACY COWLEY",
+      "item_type": "Article",
+      "updated_date": "2019-04-28T19:37:48-04:00",
+      "created_date": "2019-04-28T19:05:58-04:00",
+      "published_date": "2019-04-28T19:05:58-04:00",
+      "material_type_facet": "",
+      "kicker": "",
+      "des_facet": [
+        "Cartoons and Cartoonists",
+        "Anti-Semitism",
+        "Newspapers",
+        "Discrimination",
+        "Apologies"
+      ],
+      "org_facet": [
+        "New York Times"
+      ],
+      "per_facet": [],
+      "geo_facet": [],
+      "multimedia": [
+        {
+          "url": "https://static01.nyt.com/images/2019/04/27/business/27apple/27apple-thumbStandard.jpg",
+          "format": "Standard Thumbnail",
+          "height": 75,
+          "width": 75,
+          "type": "image",
+          "subtype": "illustration",
+          "caption": "",
+          "copyright": "Chris Gash"
+        }
+      ],
+      "short_url": "https://nyti.ms/2vopZY4"
     }
   ]
 }

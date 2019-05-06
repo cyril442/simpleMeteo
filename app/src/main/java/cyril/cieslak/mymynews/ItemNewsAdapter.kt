@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
-import cyril.cieslak.mymynews.Fragments.TopStoryData
 
-class ItemNewsAdapter(val datas: MutableList<String>) : RecyclerView.Adapter<ItemNewsAdapter.ViewHolder>() {
 
+class ItemNewsAdapter(val datas: List<MutableList<String>>) : RecyclerView.Adapter<ItemNewsAdapter.ViewHolder>() {
 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -18,7 +17,7 @@ class ItemNewsAdapter(val datas: MutableList<String>) : RecyclerView.Adapter<Ite
         val icon = itemView.findViewById<ImageView>(R.id.icon)
         val section = itemView.findViewById<TextView>(R.id.section)
         val subsection = itemView.findViewById<TextView>(R.id.subsection)
-       val date = itemView.findViewById<TextView>(R.id.date)
+        val date = itemView.findViewById<TextView>(R.id.date)
         val title = itemView.findViewById<TextView>(R.id.title)
 
 
@@ -37,12 +36,14 @@ class ItemNewsAdapter(val datas: MutableList<String>) : RecyclerView.Adapter<Ite
 
         val data = datas[position]
 
-        Picasso.get().load(datas[4]).into(holder.icon)
-        holder.section.text = datas[0]
-        holder.subsection.text = datas[1]
-        holder.date.text = datas[3]
-        holder.title.text = datas[2]
+      //  holder.icon.setImageResource(R.mipmap.ic_launcher)
+        Picasso.get().load(datas[position][4]).into(holder.icon)
+        holder.section.text = datas[position][0]
+        holder.subsection.text = datas[position][1]
+        holder.date.text = datas[position][3]
+        holder.title.text = datas[position][2]
 
+       // notifyItemChanged(holder.adapterPosition)
 
     }
 
