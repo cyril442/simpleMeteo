@@ -61,7 +61,7 @@ class FragmentTopStories : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         savedInstanceState: Bundle?
     ): View? {
 
-        var theview = inflater.inflate(R.layout.fragment_fragment_most_popular, container, false)
+        var theview = inflater.inflate(R.layout.fragment_fragment_top_stories, container, false)
         swipeRefreshLayout = theview.findViewById(R.id.swiperefresh)
         swipeRefreshLayout.setOnRefreshListener(this)
 
@@ -317,11 +317,11 @@ class FragmentTopStories : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             } else {
                 // PARSE
-                Toast.makeText(
-                    c,
-                    "Network Connection and Download Succesfull. Now Attempting to Parse",
-                    Toast.LENGTH_LONG
-                ).show()
+//                Toast.makeText(
+//                    c,
+//                    "Network Connection and Download Succesfull. Now Attempting to Parse",
+//                    Toast.LENGTH_LONG
+//                ).show()
                 bingo = jsonData
              //   Toast.makeText(c, "$bingo", Toast.LENGTH_LONG).show()
 

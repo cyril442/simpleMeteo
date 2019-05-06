@@ -5,18 +5,18 @@
                 android:layout_height="match_parent"
                 tools:context=".Fragments.FragmentMostPopular">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+<android.support.v4.widget.SwipeRefreshLayout
 
-            android:id="@+id/swiperefreshmostpopular"
+        android:id="@+id/swiperefreshmostpopular"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_in_layout_most_popular"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"/>
 
-
-        <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view_in_layout_most_popular"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+</android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

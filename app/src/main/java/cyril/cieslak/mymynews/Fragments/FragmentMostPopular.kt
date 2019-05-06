@@ -51,7 +51,9 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     var adapter = ItemNewsAdapter(datas)
 
-    val jsonTopStories = "https://api.nytimes.com/svc/topstories/v2/home.json?api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
+
+   val jsonMostPopular = "https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
+
 
 
     lateinit var swipeRefreshLayout : SwipeRefreshLayout
@@ -74,7 +76,7 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        var jsonDataPreview = JSONDownloaderTopStories(context!!, jsonTopStories).execute().get()
+        var jsonDataPreview = JSONDownloaderTopStories(context!!, jsonMostPopular).execute().get()
 
 
         //    readJSonTwo
@@ -114,19 +116,19 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                 val title = jo.getString("title")
                 val section = jo.getString("section")
-                val subsection = jo.getString("subsection")
-                val updated_date = jo.getString("updated_date")
+                val views = jo.getInt("views")
+                val published_date = jo.getString("published_date")
 
                 //***--- PREPARATION OF THE SUBSECTION TO PRINT with a " > " before the texte to print---***//
-                var subsectionReadyToPrint : String
-                when (subsection) {
-                    "" ->  subsectionReadyToPrint = subsection
-                    else -> subsectionReadyToPrint = " > $subsection" }
+                var viewsReadyToPrint : String
+                when (views) {
+                    0 ->  viewsReadyToPrint = views as String
+                    else -> viewsReadyToPrint = " > Rank : $views" }
                 //***--------------------------------***//
 
                 //***--- FORMATTING THE DATE ---***//
-                var date10char = updated_date.take(10)
-                var date7char = updated_date.take(7)
+                var date10char = published_date.take(10)
+                var date7char = published_date.take(7)
                 var dateYear = date10char.take(4)
                 var dateMonth = date7char.takeLast(2)
                 var dateDay = date10char.takeLast(2)
@@ -134,19 +136,23 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 //***--------------------------------***//
 
 
-                val jam = jo.getJSONArray("multimedia")
+                val jam = jo.getJSONArray("media")
                 var jom = jam[0] as JSONObject
-                var url = jom.getString("url")
+                var jim = jom.getJSONArray("media-metadata")
+                val jem = jim[0] as JSONObject
+
+
+                var url = jem.getString("url")
 
                 //***--- GET AN IMAGE EVEN WHEN MULTIMEDIA IS EMPTY  ---**//
-                var urlToPrint : String
+                var urlToPrint : String = "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
                 when (url) {
                     "" -> urlToPrint = "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
                     else -> urlToPrint = url }
              //   [URL=https://s5.photobucket.com/user/courtney210/media/wave-bashful_zps5ab77563.jpg.html][IMG]https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg[/IMG][/URL]
                 //***--------------------------------***//
 
-                val data = mutableListOf<String>(section, subsectionReadyToPrint, title, dateToPrint, urlToPrint)
+                val data = mutableListOf<String>(section, viewsReadyToPrint, title, dateToPrint, urlToPrint)
                 datas.add(data)
 
 
@@ -189,7 +195,7 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
     @Suppress("DEPRECATION")
-    class JSONDownloaderTopStories(private var c: Context, private var jsonTopStories: String) :
+    class JSONDownloaderTopStories(private var c: Context, private var jsonMostPopular: String) :
         AsyncTask<Void, Void, String>() {
 
 
@@ -201,10 +207,10 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         // ***
 
         // ***
-        private fun connect(jsonTopStories: String): Any {
+        private fun connect(jsonMostPopular: String): Any {
 
             try {
-                val url = URL(jsonTopStories)
+                val url = URL(jsonMostPopular)
                 val con = url.openConnection() as HttpURLConnection
 
                 // Con Props
@@ -232,7 +238,7 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         // ***
         private fun download(): String {
 
-            val connection = connect(jsonTopStories)
+            val connection = connect(jsonMostPopular)
             if (connection.toString().startsWith("Error")) {
                 return connection.toString()
             }
@@ -318,13 +324,13 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             } else {
                 // PARSE
-                Toast.makeText(
-                    c,
-                    "Network Connection and Download Succesfull. Now Attempting to Parse",
-                    Toast.LENGTH_LONG
-                ).show()
-                bingo = jsonData
-                Toast.makeText(c, "$bingo", Toast.LENGTH_LONG).show()
+//                Toast.makeText(
+//                    c,
+//                    "Network Connection and Download Succesfull. Now Attempting to Parse",
+//                    Toast.LENGTH_LONG
+//                ).show()
+//                bingo = jsonData
+//                Toast.makeText(c, "$bingo", Toast.LENGTH_LONG).show()
 
                 // JSONParser(c, jsonData, myGridView).execute()
             }
@@ -336,7 +342,7 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
     override fun onRefresh() {
         Toast.makeText(context, "OnRefresh Pulled", Toast.LENGTH_SHORT).show()
-        JSONDownloaderTopStories(context!!, jsonTopStories).execute()
+        JSONDownloaderTopStories(context!!, jsonMostPopular).execute()
         if(swipeRefreshLayout.isRefreshing()){
             swipeRefreshLayout.setRefreshing(false)
         }

@@ -325,8 +325,8 @@ class FragmentSports : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 //                    "Network Connection and Download Succesfull. Now Attempting to Parse",
 //                    Toast.LENGTH_LONG
 //                ).show()
-                bingo = jsonData
-                Toast.makeText(c, "$bingo", Toast.LENGTH_LONG).show()
+//                bingo = jsonData
+//                Toast.makeText(c, "$bingo", Toast.LENGTH_LONG).show()
 
                 // JSONParser(c, jsonData, myGridView).execute()
             }
