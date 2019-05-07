@@ -115,6 +115,8 @@ class FragmentTopStories : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 val section = jo.getString("section")
                 val subsection = jo.getString("subsection")
                 val updated_date = jo.getString("updated_date")
+                val urlArticle = jo.getString("url")
+
 
                 //***--- PREPARATION OF THE SUBSECTION TO PRINT with a " > " before the texte to print---***//
                 var subsectionReadyToPrint : String
@@ -145,7 +147,7 @@ class FragmentTopStories : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 //   [URL=https://s5.photobucket.com/user/courtney210/media/wave-bashful_zps5ab77563.jpg.html][IMG]https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg[/IMG][/URL]
                 //***--------------------------------***//
 
-                val data = mutableListOf<String>(section, subsectionReadyToPrint, title, dateToPrint, urlToPrint)
+                val data = mutableListOf<String>(section, subsectionReadyToPrint, title, dateToPrint, urlToPrint, urlArticle)
                 datas.add(data)
 
 
