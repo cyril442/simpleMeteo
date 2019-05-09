@@ -1,5 +1,6 @@
 package cyril.cieslak.mymynews
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
@@ -12,11 +13,18 @@ import cyril.cieslak.mymynews.Utils.CalendarFragment
 import cyril.cieslak.mymynews.Utils.QueryFragment
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlinx.android.synthetic.main.fragment_check_box.*
+import kotlinx.android.synthetic.main.fragment_search_button.*
 
 class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentListener  {
 
+    companion object{
+        val TERMS_FOR_RESEARCH_API = "TermsForResearchApi"
+    }
+
+
 
     lateinit var calendarFragment : CalendarFragment
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,17 +80,22 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
             if (travelChecked == true) { checkedTravel = "Travel" } else {checkedTravel = ""}
 
 
-            var begin = calendarFragment.entryDate
-            var end = calendarFragment.endDate
+//            var begin = calendarFragment.entryDate
+//            var end = calendarFragment.endDate
 
 
             Toast.makeText(this, "Search Button Clicked", Toast.LENGTH_SHORT).show()
-            Log.i("Texte affiché ", " $querytext, $checkedArt, $checkedPolitics, $checkedBusiness, $checkedSport, $checkedEntrepreneurs, $checkedTravel, $begin, $end")
+            Log.i("Texte affiché ", " $querytext, $checkedArt, $checkedPolitics, $checkedBusiness, $checkedSport, $checkedEntrepreneurs, $checkedTravel")
 
             //     Log.i("BEG", " $begin ")
 
-//            val intent = Intent(this, ResultSearchActivity::class.java )
-//            startActivity(intent)
+            var termsForResearchApi = " $querytext, $checkedArt, $checkedPolitics, $checkedBusiness, $checkedSport, $checkedEntrepreneurs, $checkedTravel"
+
+           var intent = Intent(button.context, ResultSearchActivity::class.java)
+            // To add some putExtra with all the strategic words to
+            intent.putExtra(TERMS_FOR_RESEARCH_API, "$termsForResearchApi")
+            button_search.context.startActivity(intent)
+
 
         })
 
