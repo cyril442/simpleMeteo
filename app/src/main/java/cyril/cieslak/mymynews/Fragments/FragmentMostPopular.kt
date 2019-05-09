@@ -118,6 +118,7 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 val section = jo.getString("section")
                 val views = jo.getInt("views")
                 val published_date = jo.getString("published_date")
+                val urlArticle = jo.getString("url")
 
                 //***--- PREPARATION OF THE SUBSECTION TO PRINT with a " > " before the texte to print---***//
                 var viewsReadyToPrint : String
@@ -152,7 +153,7 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
              //   [URL=https://s5.photobucket.com/user/courtney210/media/wave-bashful_zps5ab77563.jpg.html][IMG]https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg[/IMG][/URL]
                 //***--------------------------------***//
 
-                val data = mutableListOf<String>(section, viewsReadyToPrint, title, dateToPrint, urlToPrint)
+                val data = mutableListOf<String>(section, viewsReadyToPrint, title, dateToPrint, urlToPrint, urlArticle)
                 datas.add(data)
 
 

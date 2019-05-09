@@ -64,7 +64,7 @@ class ItemNewsAdapter(val datas: List<MutableList<String>>) : RecyclerView.Adapt
         holder?.date?.text = datas[position][3]
         holder?.title?.text = datas[position][2]
 
-        holder?.urlArticle = datas[position][4]
+        holder?.urlArticle = datas[position][5]
 
     }
 
