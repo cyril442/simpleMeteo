@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".Utils.QueryFragment">
+
+    <EditText
+            android:id="@+id/edit_query"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@android:color/darker_gray"
+            android:hint="@string/search_query_term"
+            android:inputType="text"
+            android:layout_gravity="center_horizontal"
+            android:singleLine="true"
+            android:backgroundTint="@color/colorPrimaryDark"
+
+    />
+
+</LinearLayout>

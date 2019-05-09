@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".Utils.CheckBoxFragment"
+        android:layout_margin="10dp">
+
+    <CheckBox
+            android:text="@string/checkbox_arts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxArts"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+    />
+
+    <CheckBox
+            android:text="@string/checkbox_politics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxPolitics"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/checkBoxArts"
+            app:layout_constraintRight_toRightOf="parent"
+    />
+
+
+    <CheckBox
+            android:text="@string/checkbox_business"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxBusiness"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxArts"
+            app:layout_constraintLeft_toLeftOf="parent"
+    />
+
+    <CheckBox
+            android:text="@string/checkbox_sports"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxSport"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxPolitics"
+            app:layout_constraintLeft_toLeftOf="@id/checkBoxPolitics"
+
+    />
+
+    <CheckBox
+            android:text="@string/checkbox_entrepreneurs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxEntrepreneurs"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxBusiness"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <CheckBox
+            android:text="@string/checkbox_travel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxTravel"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxSport"
+            app:layout_constraintLeft_toLeftOf="@id/checkBoxSport"
+    />
+
+
+
+</android.support.constraint.ConstraintLayout>
