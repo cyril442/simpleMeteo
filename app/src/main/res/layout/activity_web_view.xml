@@ -14,7 +14,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="webview_title"
+            app:title="Your Article"
             app:titleTextColor="#FFFFFF"/>
 
 
