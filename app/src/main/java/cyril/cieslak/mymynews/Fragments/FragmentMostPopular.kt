@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import cyril.cieslak.mymynews.ItemNewsAdapter
+import cyril.cieslak.mymynews.Parsers.parseDatasMostPopular
 
 
 import cyril.cieslak.mymynews.R
@@ -75,12 +76,12 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // to get the String JSonData, we use the class JSONDownloaderMostPopular
+        var jsonDataPreview = JSONDownloaderMostPopular(context!!, jsonMostPopular).execute().get()
 
-        var jsonDataPreview = JSONDownloaderTopStories(context!!, jsonMostPopular).execute().get()
 
-
-        //    readJSonTwo
-        datas = parseDatasFromFake(jsonDataPreview)
+        // To Parse the result of the JSONDownloadMostPopular using the external CLass parseDatas() which include the method parseDatasFromApi
+        datas = parseDatasMostPopular().parseDatasFromApi(jsonDataPreview)
 
 
         adapter = ItemNewsAdapter(datas)
@@ -90,85 +91,6 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         recyclerView.adapter = adapter
 
     }
-
-    private fun parseDatasFromFake(jsonDataPreview : String): MutableList<MutableList<String>> {
-
-        val inputStream: InputStream = context!!.assets!!.open("dataFake.json")
-        var json = inputStream.bufferedReader().use { it.readText() }
-
-       json = jsonDataPreview
-
-
-        try {
-
-            var jo: JSONObject
-            datas.clear()
-            var data: TopStoryData
-
-            jo = JSONObject(json)
-
-            val ja = jo.getJSONArray("results")
-
-
-            for (i in 0 until ja.length()) {
-                jo = ja.getJSONObject(i)
-
-
-                val title = jo.getString("title")
-                val section = jo.getString("section")
-                val views = jo.getInt("views")
-                val published_date = jo.getString("published_date")
-                val urlArticle = jo.getString("url")
-
-                //***--- PREPARATION OF THE SUBSECTION TO PRINT with a " > " before the texte to print---***//
-                var viewsReadyToPrint : String
-                when (views) {
-                    0 ->  viewsReadyToPrint = views as String
-                    else -> viewsReadyToPrint = " > Rank : $views" }
-                //***--------------------------------***//
-
-                //***--- FORMATTING THE DATE ---***//
-                var date10char = published_date.take(10)
-                var date7char = published_date.take(7)
-                var dateYear = date10char.take(4)
-                var dateMonth = date7char.takeLast(2)
-                var dateDay = date10char.takeLast(2)
-                var dateToPrint = "$dateDay/$dateMonth/$dateYear"
-                //***--------------------------------***//
-
-
-                val jam = jo.getJSONArray("media")
-                var jom = jam[0] as JSONObject
-                var jim = jom.getJSONArray("media-metadata")
-                val jem = jim[0] as JSONObject
-
-
-                var url = jem.getString("url")
-
-                //***--- GET AN IMAGE EVEN WHEN MULTIMEDIA IS EMPTY  ---**//
-                var urlToPrint : String = "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
-                when (url) {
-                    "" -> urlToPrint = "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
-                    else -> urlToPrint = url }
-             //   [URL=https://s5.photobucket.com/user/courtney210/media/wave-bashful_zps5ab77563.jpg.html][IMG]https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg[/IMG][/URL]
-                //***--------------------------------***//
-
-                val data = mutableListOf<String>(section, viewsReadyToPrint, title, dateToPrint, urlToPrint, urlArticle)
-                datas.add(data)
-
-
-
-            }
-
-            return datas
-
-        } catch (e: JSONException) {
-            e.printStackTrace()
-
-        }
-        return datas
-    }
-
 
     class TopStoryData(
         private var m_title: String,
@@ -196,7 +118,7 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
     @Suppress("DEPRECATION")
-    class JSONDownloaderTopStories(private var c: Context, private var jsonMostPopular: String) :
+    class JSONDownloaderMostPopular(private var c: Context, private var jsonMostPopular: String) :
         AsyncTask<Void, Void, String>() {
 
 
@@ -343,7 +265,7 @@ class FragmentMostPopular : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
     override fun onRefresh() {
         Toast.makeText(context, "OnRefresh Pulled", Toast.LENGTH_SHORT).show()
-        JSONDownloaderTopStories(context!!, jsonMostPopular).execute()
+        JSONDownloaderMostPopular(context!!, jsonMostPopular).execute()
         if(swipeRefreshLayout.isRefreshing()){
             swipeRefreshLayout.setRefreshing(false)
         }

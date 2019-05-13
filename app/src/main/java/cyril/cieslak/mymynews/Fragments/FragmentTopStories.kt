@@ -17,8 +17,7 @@ import cyril.cieslak.mymynews.ItemNewsAdapter
 
 
 import cyril.cieslak.mymynews.R
-import org.json.JSONException
-import org.json.JSONObject
+import cyril.cieslak.mymynews.Parsers.parseDatas
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
@@ -53,7 +52,7 @@ class FragmentTopStories : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     val jsonTopStories = "https://api.nytimes.com/svc/topstories/v2/home.json?api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
 
-    lateinit var swipeRefreshLayout : SwipeRefreshLayout
+    lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
 
     override fun onCreateView(
@@ -73,11 +72,12 @@ class FragmentTopStories : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        // to get the String JSonData, we use the class JSONDownloaderTopStories
         var jsonDataPreview = JSONDownloaderTopStories(context!!, jsonTopStories).execute().get()
 
 
-        //    readJSonTwo
-        datas = parseDatasFromFake(jsonDataPreview)
+        // To Parse the result of the JSONDownloadTopStories using the external CLass parseDatas() which include the method parseDatasFromApi
+            datas = parseDatas().parseDatasFromApi(jsonDataPreview)
 
 
         adapter = ItemNewsAdapter(datas)
@@ -86,81 +86,6 @@ class FragmentTopStories : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
 
-    }
-
-    private fun parseDatasFromFake(jsonDataPreview : String): MutableList<MutableList<String>> {
-
-        val inputStream: InputStream = context!!.assets!!.open("dataFake.json")
-        var json = inputStream.bufferedReader().use { it.readText() }
-
-        json = jsonDataPreview
-
-
-        try {
-
-            var jo: JSONObject
-            datas.clear()
-            var data: TopStoryData
-
-            jo = JSONObject(json)
-
-            val ja = jo.getJSONArray("results")
-
-
-            for (i in 0 until ja.length()) {
-                jo = ja.getJSONObject(i)
-
-
-                val title = jo.getString("title")
-                val section = jo.getString("section")
-                val subsection = jo.getString("subsection")
-                val updated_date = jo.getString("updated_date")
-                val urlArticle = jo.getString("url")
-
-
-                //***--- PREPARATION OF THE SUBSECTION TO PRINT with a " > " before the texte to print---***//
-                var subsectionReadyToPrint : String
-                when (subsection) {
-                    "" ->  subsectionReadyToPrint = subsection
-                    else -> subsectionReadyToPrint = " > $subsection" }
-                //***--------------------------------***//
-
-                //***--- FORMATTING THE DATE ---***//
-                var date10char = updated_date.take(10)
-                var date7char = updated_date.take(7)
-                var dateYear = date10char.take(4)
-                var dateMonth = date7char.takeLast(2)
-                var dateDay = date10char.takeLast(2)
-                var dateToPrint = "$dateDay/$dateMonth/$dateYear"
-                //***--------------------------------***//
-
-
-                val jam = jo.getJSONArray("multimedia")
-                var jom = jam[0] as JSONObject
-                var url = jom.getString("url")
-
-                //***--- GET AN IMAGE EVEN WHEN MULTIMEDIA IS EMPTY  ---**//
-                var urlToPrint : String
-                when (url) {
-                    "" -> urlToPrint = "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
-                    else -> urlToPrint = url }
-                //   [URL=https://s5.photobucket.com/user/courtney210/media/wave-bashful_zps5ab77563.jpg.html][IMG]https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg[/IMG][/URL]
-                //***--------------------------------***//
-
-                val data = mutableListOf<String>(section, subsectionReadyToPrint, title, dateToPrint, urlToPrint, urlArticle)
-                datas.add(data)
-
-
-
-            }
-
-            return datas
-
-        } catch (e: JSONException) {
-            e.printStackTrace()
-
-        }
-        return datas
     }
 
 
@@ -325,7 +250,7 @@ class FragmentTopStories : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 //                    Toast.LENGTH_LONG
 //                ).show()
                 bingo = jsonData
-             //   Toast.makeText(c, "$bingo", Toast.LENGTH_LONG).show()
+                //   Toast.makeText(c, "$bingo", Toast.LENGTH_LONG).show()
 
                 // JSONParser(c, jsonData, myGridView).execute()
             }
@@ -335,11 +260,14 @@ class FragmentTopStories : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
     }
+
     override fun onRefresh() {
         Toast.makeText(context, "OnRefresh Pulled", Toast.LENGTH_SHORT).show()
         JSONDownloaderTopStories(context!!, jsonTopStories).execute()
-        if(swipeRefreshLayout.isRefreshing()){
+        if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false)
         }
     }
+
+
 }
