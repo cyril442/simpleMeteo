@@ -2,6 +2,11 @@ package cyril.cieslak.mymynews.Utils
 
 
 import android.app.DatePickerDialog
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,16 +17,22 @@ import android.view.ViewGroup
 import android.widget.Toast
 
 import cyril.cieslak.mymynews.R
+import cyril.cieslak.mymynews.SearchActivity
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import java.lang.RuntimeException
 import java.util.*
+import kotlin.properties.Delegates
 
 
-class CalendarFragment  : Fragment()  {
+class CalendarFragment : Fragment() {
 
-    lateinit var listener : CalendarFragmentListener
-     lateinit var entryDate : String
-     lateinit var endDate : String
+    lateinit var listener: CalendarFragmentListener
+    var entryDate : String = "20190102"
+    var endDate: String = "20190512"
+
+
+
+
 
     companion object {
         fun newInstance(): CalendarFragment {
@@ -41,15 +52,12 @@ class CalendarFragment  : Fragment()  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-
-
-        // 1) Calendar
+       // 1) Calendar
 
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
-
 
 
         // 2) Listener on the ImageView Begin
@@ -94,10 +102,6 @@ class CalendarFragment  : Fragment()  {
         }
 
 
-
-
-
-
         // 2) Listener on the ImageView End
         date_end_picker_button.setOnClickListener {
             val dateEnd = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
@@ -134,18 +138,22 @@ class CalendarFragment  : Fragment()  {
 
         }
 
+
         super.onViewCreated(view, savedInstanceState)
+
     }
 
 
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        if(context is CalendarFragmentListener ){
-            listener =  context!!
+        if (context is CalendarFragmentListener) {
+            listener = context!!
         } else {
-            throw RuntimeException (context!!.toString()
-                    + " must implement CalendarFragmentListener")
+            throw RuntimeException(
+                context!!.toString()
+                        + " must implement CalendarFragmentListener"
+            )
         }
     }
 
@@ -155,14 +163,13 @@ class CalendarFragment  : Fragment()  {
     }
 
     interface CalendarFragmentListener {
-        fun onDateBegin(entryDate : String) {
+        fun onDateBegin(entryDate: String) {
+
         }
 
         fun onDateEnd(endDate: String) {}
 
     }
-
-
 
 
 
