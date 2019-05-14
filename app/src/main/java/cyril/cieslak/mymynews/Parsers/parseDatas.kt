@@ -12,6 +12,7 @@ class parseDatas () {
     val FIRST_FOUR = 4
     val LAST_TWO = 2
     val FIRST_ELEMENT_OF_THE_INDEX = 0
+    val DUMB_PICTURE_WHEN_NO_PIC_TO_DOWNLOAD = "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
 
     var datas = mutableListOf(
         mutableListOf<String>(
@@ -95,12 +96,10 @@ class parseDatas () {
                     //***--- GET AN IMAGE EVEN WHEN MULTIMEDIA IS EMPTY  ---**//
 
                     when (url) {
-                        "" -> urlToPrint =
-                            "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
+                        "" -> urlToPrint = "$DUMB_PICTURE_WHEN_NO_PIC_TO_DOWNLOAD"
                         else -> urlToPrint = url
                     }
-                    //   [URL=https://s5.photobucket.com/user/courtney210/media/wave-bashful_zps5ab77563.jpg.html][IMG]https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg[/IMG][/URL]
-                    //***--------------------------------***//
+
                 }
                 val data =
                     mutableListOf<String>(section, subsectionReadyToPrint, title, dateToPrint, urlToPrint, urlArticle)

@@ -12,6 +12,10 @@ class parseDatasMostPopular () {
     val FIRST_FOUR = 4
     val LAST_TWO = 2
     val FIRST_ELEMENT_OF_THE_INDEX = 0
+    val RANK = " > Number "
+    val DUMB_PICTURE_WHEN_NO_PIC_TO_DOWNLOAD = "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
+
+
 
     var datas = mutableListOf(
         mutableListOf<String>(
@@ -67,34 +71,33 @@ class parseDatasMostPopular () {
                 var viewsReadyToPrint : String
                 when (views) {
                     0 ->  viewsReadyToPrint = views as String
-                    else -> viewsReadyToPrint = " > Rank : $views" }
+                    else -> viewsReadyToPrint = "$RANK$views" }
                 //***--------------------------------***//
 
                 //***--- FORMATTING THE DATE ---***//
-                var date10char = published_date.take(10)
-                var date7char = published_date.take(7)
-                var dateYear = date10char.take(4)
-                var dateMonth = date7char.takeLast(2)
-                var dateDay = date10char.takeLast(2)
+                var date10char = published_date.take(YEAR_MONTH_DAY)
+                var date7char = published_date.take(YEAR_MONTH)
+                var dateYear = date10char.take(FIRST_FOUR)
+                var dateMonth = date7char.takeLast(LAST_TWO)
+                var dateDay = date10char.takeLast(LAST_TWO)
                 var dateToPrint = "$dateDay/$dateMonth/$dateYear"
                 //***--------------------------------***//
 
 
                 val jam = jo.getJSONArray("media")
-                var jom = jam[0] as JSONObject
+                var jom = jam[FIRST_ELEMENT_OF_THE_INDEX] as JSONObject
                 var jim = jom.getJSONArray("media-metadata")
-                val jem = jim[0] as JSONObject
+                val jem = jim[FIRST_ELEMENT_OF_THE_INDEX] as JSONObject
 
 
                 var url = jem.getString("url")
 
                 //***--- GET AN IMAGE EVEN WHEN MULTIMEDIA IS EMPTY  ---**//
-                var urlToPrint : String = "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
+                var urlToPrint : String
                 when (url) {
-                    "" -> urlToPrint = "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
+                    "" -> urlToPrint = DUMB_PICTURE_WHEN_NO_PIC_TO_DOWNLOAD
                     else -> urlToPrint = url }
-                //   [URL=https://s5.photobucket.com/user/courtney210/media/wave-bashful_zps5ab77563.jpg.html][IMG]https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg[/IMG][/URL]
-                //***--------------------------------***//
+
 
                 val data = mutableListOf<String>(section, viewsReadyToPrint, title, dateToPrint, urlToPrint, urlArticle)
                 datas.add(data)
