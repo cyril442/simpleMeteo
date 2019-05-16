@@ -2,11 +2,6 @@ package cyril.cieslak.mymynews.Utils
 
 
 import android.app.DatePickerDialog
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -17,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 
 import cyril.cieslak.mymynews.R
-import cyril.cieslak.mymynews.SearchActivity
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import java.lang.RuntimeException
 import java.util.*
@@ -27,8 +21,12 @@ import kotlin.properties.Delegates
 class CalendarFragment : Fragment() {
 
     lateinit var listener: CalendarFragmentListener
-    var entryDate : String = "20190102"
-    var endDate: String = "20190512"
+    var entryDate : String by Delegates.observable("20190101"){ property, oldValue, newValue ->
+        Toast.makeText(context, " the old value was : $oldValue and the new one is : $newValue", Toast.LENGTH_SHORT).show()
+    }
+    var endDate: String by Delegates.observable("20190512") {property, oldValue, newValue ->
+        Toast.makeText(context, " the old value was : $oldValue and the new one is : $newValue", Toast.LENGTH_SHORT).show()
+    }
 
 
 
@@ -90,6 +88,8 @@ class CalendarFragment : Fragment() {
                     listener.onDateBegin(entryDate)
 
                     Log.i("entry", entryDate)
+
+
 
                     Toast.makeText(activity, """$mDay - ${mMonth} - $mYear""", Toast.LENGTH_SHORT).show()
                 }, year, month, day)
@@ -163,7 +163,7 @@ class CalendarFragment : Fragment() {
     }
 
     interface CalendarFragmentListener {
-        fun onDateBegin(entryDate: String) {
+        fun onDateBegin(entryDate : String) {
 
         }
 
