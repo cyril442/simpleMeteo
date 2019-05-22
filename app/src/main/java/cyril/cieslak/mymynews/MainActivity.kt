@@ -83,9 +83,9 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_notification -> {
-                Toast.makeText(this, "Notification Button Clicked", Toast.LENGTH_SHORT).show()
-//                val intent = Intent(this, NotificationActivity::class.java)
-//                startActivity(intent)
+     //           Toast.makeText(this, "Notification Button Clicked", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, NotificationActivity::class.java)
+                startActivity(intent)
                 return true
             }
             R.id.action_about -> {
