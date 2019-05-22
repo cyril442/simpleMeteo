@@ -1,6 +1,7 @@
 package cyril.cieslak.mymynews
 
 import android.content.Intent
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
@@ -14,17 +15,20 @@ import android.widget.Toast
 import cyril.cieslak.mymynews.Utils.CalendarFragment
 import kotlinx.android.synthetic.main.fragment_check_box.*
 import kotlinx.android.synthetic.main.fragment_search_button.*
+import kotlin.properties.Delegates
 
 class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentListener {
 
     companion object {
         val TERMS_FOR_RESEARCH_API = "TermsForResearchApi"
+        val TEXT_SIZE_ZERO = 0
+        val TEXT_SIZE_ONE = 1
+
     }
 
 
     lateinit var calendarFragment: CalendarFragment
-    var editTextSize = 0
-
+    var editTextSize = TEXT_SIZE_ZERO
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +39,12 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
         val toolbar = findViewById<Toolbar>(R.id.toolbar_search_activity)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+        // Set the Button to enable and grey color and puff Before the User is Filling the edit and select at least one Checkbox
+        button_search.isEnabled = false
+
+
+
 
         // Recuperation of the Fragment into the Search Activity
         calendarFragment = CalendarFragment()
@@ -51,162 +61,241 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
         var checkedTravel: String
 
 
-
         // Test Edit Text has value and At least one Checkbox is checked
         // --- EDIT TEXT VALUE --- ///
         editTextForSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                editTextSize = 0
-                if (editTextForSearch.length() >= 1){editTextSize = editTextForSearch.length()
-                    Toast.makeText(baseContext, "Ce n'est pas vide! Nombre de caractères : $editTextSize", Toast.LENGTH_SHORT).show()
+                editTextSize = TEXT_SIZE_ZERO
+                if (editTextForSearch.length() >= TEXT_SIZE_ONE) {
+                    editTextSize = editTextForSearch.length()
+                    Toast.makeText(
+                        baseContext,
+                        "Ce n'est pas vide! Nombre de caractères : $editTextSize",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                editTextSize = 0
+                editTextSize = TEXT_SIZE_ZERO
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                editTextSize = 0
-               if (editTextForSearch.length() > 1){editTextSize = editTextForSearch.length()
-                   Toast.makeText(baseContext, "le nombre de caractères  est de $editTextSize", Toast.LENGTH_SHORT).show()
-               }
+                editTextSize = TEXT_SIZE_ZERO
+                if (editTextForSearch.length() > TEXT_SIZE_ONE) {
+                    editTextSize = editTextForSearch.length()
+                    Toast.makeText(baseContext, "le nombre de caractères  est de $editTextSize", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
 
         })
 
-        ///// --- CHECK BOX Tested Empty --- ///////
+        ///// --- CHECK BOX Tested Empty or Not --- ///////
 
-        var aarts : Boolean = true
-        var bbusiness = "base"
-        var eentrepreneurs = "base"
-        var ppolitics = "base"
-        var ssport = "base"
-        var ttravel = "base"
+        var artsIsCheckedOrNot = false
+        var businessIsCheckedOrNot = false
+        var entrepreneursIsCheckedOrNot = false
+        var politicsIsCheckedOrNot = false
+        var sportsIsCheckedOrNot = false
+        var travelIsCheckedOrNot = false
 
-
-       var lengthArt = checkBoxArts.setOnCheckedChangeListener { buttonView, isChecked ->
-            Toast.makeText(this,isChecked.toString(),Toast.LENGTH_SHORT).show()
-           when (isChecked) {
-               true -> aarts = true
-               false -> aarts = false
-           }
+        checkBoxArts.setOnClickListener {
+            if (!checkBoxArts.isChecked) {
+                artsIsCheckedOrNot = false
+            } else {artsIsCheckedOrNot = true}
+            Toast.makeText(this, "$artsIsCheckedOrNot", Toast.LENGTH_SHORT).show()
+            if (editTextSize >= 1 && artsIsCheckedOrNot) {
+                Toast.makeText(this, "Ready to Make the Button Enable because Arts is Checked", Toast.LENGTH_SHORT).show()
+                button_search.isEnabled = true
+                button_search.setBackgroundColor(Color.BLUE)
+            }
         }
 
-        checkBoxBusiness.setOnCheckedChangeListener { buttonView, isChecked ->
-            Toast.makeText(this,isChecked.toString(),Toast.LENGTH_SHORT).show()
+        checkBoxBusiness.setOnClickListener {
+            if (!checkBoxBusiness.isChecked) {
+                businessIsCheckedOrNot = false
+            } else {businessIsCheckedOrNot = true}
+            Toast.makeText(this, "$businessIsCheckedOrNot", Toast.LENGTH_SHORT).show()
+            if (editTextSize >= 1 && businessIsCheckedOrNot == true) {
+                Toast.makeText(this, "Ready to Make the Button Enable because Business is Checked", Toast.LENGTH_SHORT).show()
+                button_search.isEnabled = true
+                button_search.setBackgroundColor(Color.BLUE)
 
-            bbusiness = isChecked.toString()
-        }
-        checkBoxEntrepreneurs.setOnCheckedChangeListener { buttonView, isChecked ->
-            Toast.makeText(this,isChecked.toString(),Toast.LENGTH_SHORT).show()
-            eentrepreneurs = isChecked.toString()
-        }
-        checkBoxPolitics.setOnCheckedChangeListener { buttonView, isChecked ->
-            Toast.makeText(this,isChecked.toString(),Toast.LENGTH_SHORT).show()
-            ppolitics = isChecked.toString()
-        }
-        checkBoxSport.setOnCheckedChangeListener { buttonView, isChecked ->
-            Toast.makeText(this,isChecked.toString(),Toast.LENGTH_SHORT).show()
-            ssport = isChecked.toString()
-        }
-        checkBoxTravel.setOnCheckedChangeListener { buttonView, isChecked ->
-            Toast.makeText(this,isChecked.toString(),Toast.LENGTH_SHORT).show()
-            ttravel = isChecked.toString()
-
+            }
         }
 
-        var sizeArt = lengthArt.toString()
+        checkBoxEntrepreneurs.setOnClickListener {
+            if (!checkBoxEntrepreneurs.isChecked) {
+                entrepreneursIsCheckedOrNot = false
+            } else {entrepreneursIsCheckedOrNot = true}
+            Toast.makeText(this, "$entrepreneursIsCheckedOrNot", Toast.LENGTH_SHORT).show()
+            if (editTextSize >= 1 && entrepreneursIsCheckedOrNot == true) {
+                Toast.makeText(this, "Ready to Make the Button Enable because Entrepreneurs is Checked", Toast.LENGTH_SHORT).show()
+                button_search.isEnabled = true
+                button_search.setBackgroundColor(Color.BLUE)
 
-
-
-        var checkboxAtLeastOnIsChecked : String = " $sizeArt ${checkBoxBusiness.isChecked} ${checkBoxEntrepreneurs.isChecked} ${checkBoxPolitics.isChecked}  ${checkBoxSport.isChecked} ${checkBoxTravel.isChecked}"
-
-
-
-
-        // OnClick of the button Search
-        button.setOnClickListener(View.OnClickListener {
-            //// //// //// Toast to test the output of the lengthArt and sizeArt ///
-            ////  Toast.makeText(this,"$checkboxAtLeastOnIsChecked",Toast.LENGTH_SHORT).show()
-
-
-            Log.i("test", " le texte ecrit est :$editTextSize et les valeur sont $checkboxAtLeastOnIsChecked ")
-            val querytext = editTextForSearch.text
-
-
-            var artsChecked: Boolean = checkBoxArts.isChecked
-            if (artsChecked == true) {
-                checkedArt = "\"Arts\""
-            } else {
-                checkedArt = ""
             }
+        }
 
-            val politicsChecked: Boolean = checkBoxPolitics.isChecked
-            if (politicsChecked == true) {
-                checkedPolitics = "\"Politics\""
-            } else {
-                checkedPolitics = ""
+        checkBoxPolitics.setOnClickListener {
+            if (!checkBoxPolitics.isChecked) {
+                politicsIsCheckedOrNot = false
+            } else {politicsIsCheckedOrNot = true}
+            Toast.makeText(this, "$politicsIsCheckedOrNot", Toast.LENGTH_SHORT).show()
+            if (editTextSize >= 1 && politicsIsCheckedOrNot == true) {
+                Toast.makeText(this, "Ready to Make the Button Enable because politics is Checked", Toast.LENGTH_SHORT).show()
+                button_search.isEnabled = true
+                button_search.setBackgroundColor(Color.BLUE)
+
             }
+        }
 
-            val businessChecked: Boolean = checkBoxBusiness.isChecked
-            if (businessChecked == true) {
-                checkedBusiness = "\"Business\""
-            } else {
-                checkedBusiness = ""
+        checkBoxSport.setOnClickListener {
+            if (!checkBoxSport.isChecked) {
+                sportsIsCheckedOrNot = false
+            } else {sportsIsCheckedOrNot = true}
+            Toast.makeText(this, "$sportsIsCheckedOrNot", Toast.LENGTH_SHORT).show()
+            if (editTextSize >= 1 && sportsIsCheckedOrNot == true) {
+                Toast.makeText(this, "Ready to Make the Button Enable because Sport is Checked", Toast.LENGTH_SHORT).show()
+                button_search.isEnabled = true
+                button_search.setBackgroundColor(Color.BLUE)
+
             }
+        }
 
-            val sportChecked: Boolean = checkBoxSport.isChecked
-            if (sportChecked == true) {
-                checkedSport = "\"Sports\""
-            } else {
-                checkedSport = ""
+        checkBoxTravel.setOnClickListener {
+            if (!checkBoxTravel.isChecked) {
+                travelIsCheckedOrNot = false
+            } else {travelIsCheckedOrNot = true}
+            Toast.makeText(this, "$travelIsCheckedOrNot", Toast.LENGTH_SHORT).show()
+            if (editTextSize >= 1 && travelIsCheckedOrNot == true) {
+                Toast.makeText(this, "Ready to Make the Button Enable because Travel is Checked", Toast.LENGTH_SHORT).show()
+                button_search.isEnabled = true
+                button_search.setBackgroundColor(Color.BLUE)
+
             }
+        }
 
-            val entrepreneursChecked: Boolean = checkBoxEntrepreneurs.isChecked
-            if (entrepreneursChecked == true) {
-                checkedEntrepreneurs = "\"Entrepreneurs\""
-            } else {
-                checkedEntrepreneurs = ""
-            }
-
-            val travelChecked: Boolean = checkBoxTravel.isChecked
-            if (travelChecked == true) {
-                checkedTravel = "\"Travel\""
-            } else {
-                checkedTravel = ""
-            }
+        var theCheckBoxStringTrueFalse =  "$artsIsCheckedOrNot $businessIsCheckedOrNot $entrepreneursIsCheckedOrNot $politicsIsCheckedOrNot $sportsIsCheckedOrNot $travelIsCheckedOrNot".trim()
+        var validCheckBoxString = theCheckBoxStringTrueFalse.contains("true", ignoreCase = false)
 
 
-            var begin = CalendarFragment.newInstance().entryDate
-            var end = calendarFragment.endDate
+//
+//            if (editTextSize >= 1 && validCheckBoxString) {
+//                Toast.makeText(this, "Ready to Make the Button Enable", Toast.LENGTH_SHORT).show()
+//            }
+
+
+            // OnClick of the button Search
+            button.setOnClickListener(View.OnClickListener {
+                //// //// //// Toast to test the output of the lengthArt and sizeArt ///
+                ////  Toast.makeText(this,"$checkboxAtLeastOnIsChecked",Toast.LENGTH_SHORT).show()
+
+
+                Log.i("test", " le texte ecrit est :$editTextSize et les valeur sont arts :  $artsIsCheckedOrNot, $businessIsCheckedOrNot, $entrepreneursIsCheckedOrNot, $politicsIsCheckedOrNot, $sportsIsCheckedOrNot, $travelIsCheckedOrNot ")
+                val querytext = editTextForSearch.text
+
+
+                var artsChecked: Boolean = checkBoxArts.isChecked
+                if (artsChecked == true) {
+                    checkedArt = "\"Arts\""
+                } else {
+                    checkedArt = ""
+                }
+
+                val politicsChecked: Boolean = checkBoxPolitics.isChecked
+                if (politicsChecked == true) {
+                    checkedPolitics = "\"Politics\""
+                } else {
+                    checkedPolitics = ""
+                }
+
+                val businessChecked: Boolean = checkBoxBusiness.isChecked
+                if (businessChecked == true) {
+                    checkedBusiness = "\"Business\""
+                } else {
+                    checkedBusiness = ""
+                }
+
+                val sportChecked: Boolean = checkBoxSport.isChecked
+                if (sportChecked == true) {
+                    checkedSport = "\"Sports\""
+                } else {
+                    checkedSport = ""
+                }
+
+                val entrepreneursChecked: Boolean = checkBoxEntrepreneurs.isChecked
+                if (entrepreneursChecked == true) {
+                    checkedEntrepreneurs = "\"Entrepreneurs\""
+                } else {
+                    checkedEntrepreneurs = ""
+                }
+
+                val travelChecked: Boolean = checkBoxTravel.isChecked
+                if (travelChecked == true) {
+                    checkedTravel = "\"Travel\""
+                } else {
+                    checkedTravel = ""
+                }
+
+   //             calendarFragment = CalendarFragment()
+
+
+//
+//                var begin: String by Delegates.observable("20190101") { property, oldValue, newValue ->
+//                    Toast.makeText(
+//                        this,
+//                        " the old value was : $oldValue and the new one is : $newValue",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+
+                //var begin = eeentry.toString()
+                      var begin = calendarFragment.entryDate
+                var end = calendarFragment.endDate
 
 
 
 
-            Toast.makeText(this, "Search Button Clicked", Toast.LENGTH_SHORT).show()
-            //           Log.i("Texte affiché ", "$querytext, $checkedArt, $checkedPolitics, $checkedBusiness, $checkedSport, $checkedEntrepreneurs, $checkedTravel, $begin, $end ")
+                Toast.makeText(this, "Search Button Clicked", Toast.LENGTH_SHORT).show()
+                //           Log.i("Texte affiché ", "$querytext, $checkedArt, $checkedPolitics, $checkedBusiness, $checkedSport, $checkedEntrepreneurs, $checkedTravel, $begin, $end ")
 
-            //     Log.i("BEG", " $begin ")
-            var stringWithTermsForRequest =
-                ("$checkedArt$checkedPolitics$checkedBusiness$checkedSport$checkedEntrepreneurs$checkedTravel").trim()
-            var termsForResearchApi = "$stringWithTermsForRequest".replace("\\s".toRegex(), "")
-
-
-            val stringForRequest =
-                "https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=$begin&end_date=$end&q=$querytext&fq=news_desk($termsForResearchApi)&sort=relevance&api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
-            Log.i("Textes", "$stringForRequest")
-
-            var intent = Intent(button.context, ResultSearchActivity::class.java)
-            // The string for the APi request to the server:
-            intent.putExtra(TERMS_FOR_RESEARCH_API, "$stringForRequest")
-
-            button_search.context.startActivity(intent)
+                //     Log.i("BEG", " $begin ")
+                var stringWithTermsForRequest =
+                    ("$checkedArt$checkedPolitics$checkedBusiness$checkedSport$checkedEntrepreneurs$checkedTravel").trim()
+                var termsForResearchApi = "$stringWithTermsForRequest".replace("\\s".toRegex(), "")
 
 
-        })
+                val stringForRequest =
+                    "https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=${begin}&end_date=$end&q=$querytext&fq=news_desk($termsForResearchApi)&sort=relevance&api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
+                Log.i("Textes", "$stringForRequest")
+
+                var intent = Intent(button.context, ResultSearchActivity::class.java)
+                // The string for the APi request to the server:
+                intent.putExtra(TERMS_FOR_RESEARCH_API, "$stringForRequest")
+
+                button_search.context.startActivity(intent)
+
+
+            })
+
+        }
+
+         fun getBegin(newValue: String): String {
+            return newValue
+        }
+
+
+//    fun eeeentry(var calendarFragment: CalendarFragment, var entryDate : String) : String{
+//
+//        return eeeentry()
+
+//    var eeentry = CalendarFragment.apply {
+//        calendarFragment = CalendarFragment()
+//        calendarFragment.entryDate
+//    }
 
     }
 
-}
 

@@ -46,10 +46,6 @@ class ResultSearchActivity : AppCompatActivity() {
 
     var adapter = ItemNewsAdapter(datas)
 
-    lateinit var swipeRefreshLayout: SwipeRefreshLayout
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result_search)
@@ -69,11 +65,11 @@ class ResultSearchActivity : AppCompatActivity() {
 //        swipeRefreshLayout = findViewById(R.id.swiperefresh)
 //        swipeRefreshLayout.setOnRefreshListener()
 
-        // to get the String JSonData, we use the class JSONDownloaderTopStories
+        // to get the String JSonData, we use the class JSONDownloaderResultSearchActivity
         var jsonDataPreview = JSONDownloaderResultSearchActivity(this, jsonResultSearchActivity).execute().get()
 
 
-        // To Parse the result of the JSONDownloadTopStories using the external CLass parseDatas() which include the method parseDatasFromApi
+        // To Parse the result of the JSONDownloadResultSearch using the external CLass parseDatas() which include the method parseDatasFromApi
         datas = parseDatasResultSearchActivity().parseDatasFromApi(jsonDataPreview)
 
 
@@ -258,13 +254,5 @@ class ResultSearchActivity : AppCompatActivity() {
 
     }
 
-//    override fun onRefresh() {
-//        Toast.makeText(context, "OnRefresh Pulled", Toast.LENGTH_SHORT).show()
-//        JSONDownloaderTopStories(this, jsonResultSearchActivity).execute()
-//        if (swipeRefreshLayout.isRefreshing()) {
-//            swipeRefreshLayout.setRefreshing(false)
-//        }
-//    }
 
-//}
 }
