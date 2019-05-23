@@ -1,13 +1,17 @@
 package cyril.cieslak.mymynews
 
+import android.app.NotificationManager
+import android.content.Context
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
+import android.support.v4.app.NotificationCompat
 import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -23,6 +27,7 @@ class NotificationActivity : AppCompatActivity() {
     companion object {
         val TEXT_SIZE_ZERO = 0
         val TEXT_SIZE_ONE = 1
+        val CHANNEL_ID = "channel_ID"
     }
 
 
@@ -290,5 +295,34 @@ class NotificationActivity : AppCompatActivity() {
        /// ---- Parse The datas ---- ///
        var datas = parseDatasNotification().parseDatasFromApi(jsonDataPreview)
        Log.i("Textes", "voici les données récupérrées : $datas")
+
+
+
+       /// --- Build the Notification --- ///
+
+       fun sendNotification() {
+           //Get an instance of NotificationManager//
+           val mBuilder = NotificationCompat.Builder(this)
+               .setSmallIcon(R.drawable.ic_launcher_foreground)
+               .setContentTitle("New York Times")
+               .setContentText("You have $datas new articles to read ")
+           // Gets an instance of the NotificationManager service//
+           val mNotificationManager =
+               getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+           // When you issue multiple notifications about the same type of event,
+           // it’s best practice for your app to try to update an existing notification
+           // with this new information, rather than immediately creating a new notification.
+           // If you want to update this notification at a later date, you need to assign it an ID.
+           // You can then use this ID whenever you issue a subsequent notification.
+           // If the previous notification is still visible, the system will update this existing notification,
+           // rather than create a new one. In this example, the notification’s ID is 001//
+           NotificationManager.IMPORTANCE_DEFAULT
+
+           mNotificationManager.notify(1, mBuilder.build())
+
+       }
+
+       // Launch Notification
+       sendNotification()
     }
 }
