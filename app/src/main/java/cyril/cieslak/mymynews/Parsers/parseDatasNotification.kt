@@ -23,9 +23,9 @@ class parseDatasNotification() {
 
             job = jo.getJSONObject("response")
             val ja = job.getJSONObject("meta")
-            val time = ja.getString("time")
+            val hits = ja.getString("hits")
 
-            datas = time
+            datas = hits
             return datas
 
         } catch (e: JSONException) {
