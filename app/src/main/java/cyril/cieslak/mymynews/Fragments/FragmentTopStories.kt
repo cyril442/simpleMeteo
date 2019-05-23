@@ -77,7 +77,7 @@ class FragmentTopStories : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
         // To Parse the result of the JSONDownloadTopStories using the external CLass parseDatas() which include the method parseDatasFromApi
-            datas = parseDatas().parseDatasFromApi(jsonDataPreview)
+        datas = parseDatas().parseDatasFromApi(jsonDataPreview)
 
 
         adapter = ItemNewsAdapter(datas)

@@ -204,9 +204,12 @@ class NotificationActivity : AppCompatActivity() {
             }
         }
 
+        val newMainActivity = MainActivity()
+
         switch_notification_enable.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked){
-                newsNotificationOn()
+              //  newMainActivity.setTheNotificationOn()
+                Log.i("textes", "La notification est activée par le bouton switch")
             } else {
                 Log.i("textes", "La notification est désactivée par le bouton switch")
 
@@ -287,8 +290,14 @@ class NotificationActivity : AppCompatActivity() {
             "https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=${yesterday}&end_date=$today&q=$queryText&fq=news_desk($termsForResearchApi)&sort=relevance&api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
         Log.i("Textes", "$stringForRequest")
 
+        // Save the StringForRequest
+       saveData(stringForRequest)
+       val saveStringForRequest = getData()
+
+
+
        /// ----- Downloading the datas from the server ---- ////
-       val jsonDataPreview = ResultSearchActivity.JSONDownloaderResultSearchActivity(this, stringForRequest).execute().get()
+       val jsonDataPreview = ResultSearchActivity.JSONDownloaderResultSearchActivity(this, saveStringForRequest).execute().get()
        Log.i("Textes", " la string to Parse : $jsonDataPreview")
 
 
@@ -325,4 +334,23 @@ class NotificationActivity : AppCompatActivity() {
        // Launch Notification
        sendNotification()
     }
+
+    // Saving in Shared Preferences the Last StringForRequest created //
+    fun saveData(stringForRequest : String) {
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE) ?: return
+        with(sharedPref.edit()) {
+            putString("stringForRequest", "$stringForRequest")
+            commit()
+        }
+    }
+    // Retrieving the last stringForRequest saved into Shared Preferences
+    fun getData() : String {
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE) ?: return ""
+        val strStringForRequest = sharedPref.getString("stringForRequest", "")
+        val strForStringForRequest = strStringForRequest.toString()
+      //  Toast.makeText(this, " Voici la string sauvée en SharedPreferences : $str_stringForRequest", Toast.LENGTH_LONG).show()
+        Log.i("NotificationActivity", " Voici la string sauvée : $strStringForRequest")
+        return  strForStringForRequest
+    }
+
 }

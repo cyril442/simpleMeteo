@@ -16,17 +16,34 @@ import kotlinx.android.synthetic.main.fragment_calendar.*
 import java.lang.RuntimeException
 import java.util.*
 import kotlin.properties.Delegates
+import kotlin.properties.Delegates.observable
 
 
 class CalendarFragment : Fragment() {
 
     lateinit var listener: CalendarFragmentListener
-    var entryDate : String by Delegates.observable("20190101"){ property, oldValue, newValue ->
-        Toast.makeText(context, " the old value was : $oldValue and the new one is : $newValue", Toast.LENGTH_SHORT).show()
+
+
+    var entryDate: String by Delegates.observable("11111111") { property, oldValue, newValue ->
+        Toast.makeText(context, " the old value was : $oldValue and the new one is : $newValue", Toast.LENGTH_SHORT)
+            .show()
+}
+
+
+
+    var endDate: String by Delegates.observable("20190404") {property, oldValue, newValue ->
+  //      Toast.makeText(context, " the old value was : $oldValue and the new one is : $newValue", Toast.LENGTH_SHORT).show()
     }
-    var endDate: String by Delegates.observable("20190512") {property, oldValue, newValue ->
-        Toast.makeText(context, " the old value was : $oldValue and the new one is : $newValue", Toast.LENGTH_SHORT).show()
-    }
+
+ //   lateinit var endDate: String
+
+//    fun newInstanceAfterDateChange() : String{
+//
+//        var endDate: String by Delegates.observable("22222222") {property, oldValue, newValue ->
+//            //      Toast.makeText(context, " the old value was : $oldValue and the new one is : $newValue", Toast.LENGTH_SHORT).show()
+//        }
+//        return endDate
+//    }
 
 
 
@@ -38,7 +55,10 @@ class CalendarFragment : Fragment() {
             var endDate: String
             return CalendarFragment()
         }
+
     }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -141,6 +161,7 @@ class CalendarFragment : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
+
     }
 
 
@@ -163,13 +184,14 @@ class CalendarFragment : Fragment() {
     }
 
     interface CalendarFragmentListener {
-        fun onDateBegin(entryDate : String) {
+        fun onDateBegin(entryDate : String)  {
 
         }
-
         fun onDateEnd(endDate: String) {}
 
+
     }
+
 
 
 

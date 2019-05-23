@@ -1,8 +1,7 @@
 package cyril.cieslak.mymynews
 
 import android.annotation.SuppressLint
-import android.app.NotificationManager
-import android.content.Context
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -10,13 +9,18 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import cyril.cieslak.mymynews.Fragments.FragmentMostPopular
 import cyril.cieslak.mymynews.Fragments.FragmentTopStories
 import cyril.cieslak.mymynews.Fragments.FragmentSports
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,9 +41,7 @@ class MainActivity : AppCompatActivity() {
         var toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-
     }
-
 
 
 
@@ -95,12 +97,35 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_help -> {
+                setTheNotificationOn()
                 Toast.makeText(this, "help Button Clicked", Toast.LENGTH_SHORT).show()
                 return true
             }
             // In else, we return the default value
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    fun setTheNotificationOn (){
+        // Set the Notification On or off
+
+        val immediateWork = OneTimeWorkRequestBuilder<NotificationWorker>()
+            .build()
+
+        val work = PeriodicWorkRequestBuilder<NotificationWorker>(15, TimeUnit.MINUTES)
+            .build()
+
+        WorkManager.getInstance().enqueue(work, immediateWork)
+
+        WorkManager.getInstance().getStatusById(work.id)
+            .observe(this, Observer { workStatus ->
+                Log.i("workManager", "workstatus = $workStatus" )
+
+                if (workStatus != null && !workStatus.state.isFinished){
+                    Log.i("workManager", "Not yet finished ")
+                }
+            })
+
     }
 
 }

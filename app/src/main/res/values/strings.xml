@@ -13,8 +13,9 @@
     <string name="checkbox_arts">Arts</string>
     <string name="checkbox_politics">Politics</string>
     <string name="checkbox_business">Business</string>
-    <string name="checkbox_sports">Sport</string>
+    <string name="checkbox_sports">Sports</string>
     <string name="checkbox_entrepreneurs">Entrepreneurs</string>
     <string name="checkbox_travel">Travel</string>
     <string name="search_button_search_activity">SEARCH</string>
+    <string name="Notifications">Notifications</string>
 </resources>

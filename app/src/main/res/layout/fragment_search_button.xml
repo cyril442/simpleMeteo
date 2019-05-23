@@ -11,6 +11,10 @@
             android:layout_height="wrap_content"
             android:text="@string/search_button_search_activity"
             android:background="@color/colorPrimary"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+
+
+
+            />
 
 </FrameLayout>
