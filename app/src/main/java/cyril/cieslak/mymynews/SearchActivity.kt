@@ -1,5 +1,7 @@
 package cyril.cieslak.mymynews
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
@@ -18,6 +20,8 @@ import kotlinx.android.synthetic.main.fragment_search_button.*
 import kotlin.properties.Delegates
 
 class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentListener {
+
+
 
     companion object {
         val TERMS_FOR_RESEARCH_API = "TermsForResearchApi"
@@ -42,8 +46,6 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
 
         // Set the Button to enable and grey color and puff Before the User is Filling the edit and select at least one Checkbox
         button_search.isEnabled = false
-
-
 
 
         // Recuperation of the Fragment into the Search Activity
@@ -103,10 +105,13 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
         checkBoxArts.setOnClickListener {
             if (!checkBoxArts.isChecked) {
                 artsIsCheckedOrNot = false
-            } else {artsIsCheckedOrNot = true}
+            } else {
+                artsIsCheckedOrNot = true
+            }
             Toast.makeText(this, "$artsIsCheckedOrNot", Toast.LENGTH_SHORT).show()
             if (editTextSize >= 1 && artsIsCheckedOrNot) {
-                Toast.makeText(this, "Ready to Make the Button Enable because Arts is Checked", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Ready to Make the Button Enable because Arts is Checked", Toast.LENGTH_SHORT)
+                    .show()
                 button_search.isEnabled = true
                 button_search.setBackgroundColor(Color.BLUE)
             }
@@ -115,10 +120,13 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
         checkBoxBusiness.setOnClickListener {
             if (!checkBoxBusiness.isChecked) {
                 businessIsCheckedOrNot = false
-            } else {businessIsCheckedOrNot = true}
+            } else {
+                businessIsCheckedOrNot = true
+            }
             Toast.makeText(this, "$businessIsCheckedOrNot", Toast.LENGTH_SHORT).show()
             if (editTextSize >= 1 && businessIsCheckedOrNot == true) {
-                Toast.makeText(this, "Ready to Make the Button Enable because Business is Checked", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Ready to Make the Button Enable because Business is Checked", Toast.LENGTH_SHORT)
+                    .show()
                 button_search.isEnabled = true
                 button_search.setBackgroundColor(Color.BLUE)
 
@@ -128,10 +136,16 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
         checkBoxEntrepreneurs.setOnClickListener {
             if (!checkBoxEntrepreneurs.isChecked) {
                 entrepreneursIsCheckedOrNot = false
-            } else {entrepreneursIsCheckedOrNot = true}
+            } else {
+                entrepreneursIsCheckedOrNot = true
+            }
             Toast.makeText(this, "$entrepreneursIsCheckedOrNot", Toast.LENGTH_SHORT).show()
             if (editTextSize >= 1 && entrepreneursIsCheckedOrNot == true) {
-                Toast.makeText(this, "Ready to Make the Button Enable because Entrepreneurs is Checked", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Ready to Make the Button Enable because Entrepreneurs is Checked",
+                    Toast.LENGTH_SHORT
+                ).show()
                 button_search.isEnabled = true
                 button_search.setBackgroundColor(Color.BLUE)
 
@@ -141,10 +155,13 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
         checkBoxPolitics.setOnClickListener {
             if (!checkBoxPolitics.isChecked) {
                 politicsIsCheckedOrNot = false
-            } else {politicsIsCheckedOrNot = true}
+            } else {
+                politicsIsCheckedOrNot = true
+            }
             Toast.makeText(this, "$politicsIsCheckedOrNot", Toast.LENGTH_SHORT).show()
             if (editTextSize >= 1 && politicsIsCheckedOrNot == true) {
-                Toast.makeText(this, "Ready to Make the Button Enable because politics is Checked", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Ready to Make the Button Enable because politics is Checked", Toast.LENGTH_SHORT)
+                    .show()
                 button_search.isEnabled = true
                 button_search.setBackgroundColor(Color.BLUE)
 
@@ -154,10 +171,13 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
         checkBoxSport.setOnClickListener {
             if (!checkBoxSport.isChecked) {
                 sportsIsCheckedOrNot = false
-            } else {sportsIsCheckedOrNot = true}
+            } else {
+                sportsIsCheckedOrNot = true
+            }
             Toast.makeText(this, "$sportsIsCheckedOrNot", Toast.LENGTH_SHORT).show()
             if (editTextSize >= 1 && sportsIsCheckedOrNot == true) {
-                Toast.makeText(this, "Ready to Make the Button Enable because Sport is Checked", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Ready to Make the Button Enable because Sport is Checked", Toast.LENGTH_SHORT)
+                    .show()
                 button_search.isEnabled = true
                 button_search.setBackgroundColor(Color.BLUE)
 
@@ -167,18 +187,65 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
         checkBoxTravel.setOnClickListener {
             if (!checkBoxTravel.isChecked) {
                 travelIsCheckedOrNot = false
-            } else {travelIsCheckedOrNot = true}
+            } else {
+                travelIsCheckedOrNot = true
+            }
             Toast.makeText(this, "$travelIsCheckedOrNot", Toast.LENGTH_SHORT).show()
             if (editTextSize >= 1 && travelIsCheckedOrNot == true) {
-                Toast.makeText(this, "Ready to Make the Button Enable because Travel is Checked", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Ready to Make the Button Enable because Travel is Checked", Toast.LENGTH_SHORT)
+                    .show()
                 button_search.isEnabled = true
                 button_search.setBackgroundColor(Color.BLUE)
 
             }
         }
 
-        var theCheckBoxStringTrueFalse =  "$artsIsCheckedOrNot $businessIsCheckedOrNot $entrepreneursIsCheckedOrNot $politicsIsCheckedOrNot $sportsIsCheckedOrNot $travelIsCheckedOrNot".trim()
+        var theCheckBoxStringTrueFalse =
+            "$artsIsCheckedOrNot $businessIsCheckedOrNot $entrepreneursIsCheckedOrNot $politicsIsCheckedOrNot $sportsIsCheckedOrNot $travelIsCheckedOrNot".trim()
         var validCheckBoxString = theCheckBoxStringTrueFalse.contains("true", ignoreCase = false)
+
+
+
+        // VIEW MODEL TO COLLECT THE DATES FROM THE FRAGMENT
+        // ShareViewModel entering the scope of SearchActivity
+        val sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
+
+        var entryDateAfterViewModel: String by Delegates.observable("11111111") { property, oldValue, newValue ->
+            Toast.makeText(this, " the old value was : $oldValue and the new one is ENTRYDATEAFTERVIEWMODEL : $newValue", Toast.LENGTH_SHORT)
+                .show()
+        }
+
+        var endDateAfterViewModel: String by Delegates.observable("22222222") { property, oldValue, newValue ->
+            Toast.makeText(this, " the old value was : $oldValue and the new one is ENDDATEATERVIEWMODEL : $newValue", Toast.LENGTH_SHORT)
+                .show()
+        }
+
+
+
+
+            sharedViewModel.inputEntryDate.observe(this, Observer {
+                it?.let {
+                    getBegin(it)
+                    var begin = "$it"
+                    Log.i("SearchActivity", "value of Begin Second : $begin")
+                    entryDateAfterViewModel = begin
+
+                }
+            })
+
+
+
+
+
+
+        sharedViewModel.inputEndDate.observe(this, Observer {
+            it?.let {
+                var end = "$it"
+                Log.i("SearchActivity", "value of End : $end")
+                endDateAfterViewModel = end
+
+            }
+        })
 
 
 //
@@ -187,59 +254,62 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
 //            }
 
 
-            // OnClick of the button Search
-            button.setOnClickListener(View.OnClickListener {
-                //// //// //// Toast to test the output of the lengthArt and sizeArt ///
-                ////  Toast.makeText(this,"$checkboxAtLeastOnIsChecked",Toast.LENGTH_SHORT).show()
+        // OnClick of the button Search
+        button.setOnClickListener(View.OnClickListener {
+            //// //// //// Toast to test the output of the lengthArt and sizeArt ///
+            ////  Toast.makeText(this,"$checkboxAtLeastOnIsChecked",Toast.LENGTH_SHORT).show()
 
 
-                Log.i("test", " le texte ecrit est :$editTextSize et les valeur sont arts :  $artsIsCheckedOrNot, $businessIsCheckedOrNot, $entrepreneursIsCheckedOrNot, $politicsIsCheckedOrNot, $sportsIsCheckedOrNot, $travelIsCheckedOrNot ")
-                val querytext = editTextForSearch.text
+            Log.i(
+                "test",
+                " le texte ecrit est :$editTextSize et les valeur sont arts :  $artsIsCheckedOrNot, $businessIsCheckedOrNot, $entrepreneursIsCheckedOrNot, $politicsIsCheckedOrNot, $sportsIsCheckedOrNot, $travelIsCheckedOrNot "
+            )
+            val querytext = editTextForSearch.text
 
 
-                var artsChecked: Boolean = checkBoxArts.isChecked
-                if (artsChecked == true) {
-                    checkedArt = "\"Arts\""
-                } else {
-                    checkedArt = ""
-                }
+            var artsChecked: Boolean = checkBoxArts.isChecked
+            if (artsChecked == true) {
+                checkedArt = "\"Arts\""
+            } else {
+                checkedArt = ""
+            }
 
-                val politicsChecked: Boolean = checkBoxPolitics.isChecked
-                if (politicsChecked == true) {
-                    checkedPolitics = "\"Politics\""
-                } else {
-                    checkedPolitics = ""
-                }
+            val politicsChecked: Boolean = checkBoxPolitics.isChecked
+            if (politicsChecked == true) {
+                checkedPolitics = "\"Politics\""
+            } else {
+                checkedPolitics = ""
+            }
 
-                val businessChecked: Boolean = checkBoxBusiness.isChecked
-                if (businessChecked == true) {
-                    checkedBusiness = "\"Business\""
-                } else {
-                    checkedBusiness = ""
-                }
+            val businessChecked: Boolean = checkBoxBusiness.isChecked
+            if (businessChecked == true) {
+                checkedBusiness = "\"Business\""
+            } else {
+                checkedBusiness = ""
+            }
 
-                val sportChecked: Boolean = checkBoxSport.isChecked
-                if (sportChecked == true) {
-                    checkedSport = "\"Sports\""
-                } else {
-                    checkedSport = ""
-                }
+            val sportChecked: Boolean = checkBoxSport.isChecked
+            if (sportChecked == true) {
+                checkedSport = "\"Sports\""
+            } else {
+                checkedSport = ""
+            }
 
-                val entrepreneursChecked: Boolean = checkBoxEntrepreneurs.isChecked
-                if (entrepreneursChecked == true) {
-                    checkedEntrepreneurs = "\"Entrepreneurs\""
-                } else {
-                    checkedEntrepreneurs = ""
-                }
+            val entrepreneursChecked: Boolean = checkBoxEntrepreneurs.isChecked
+            if (entrepreneursChecked == true) {
+                checkedEntrepreneurs = "\"Entrepreneurs\""
+            } else {
+                checkedEntrepreneurs = ""
+            }
 
-                val travelChecked: Boolean = checkBoxTravel.isChecked
-                if (travelChecked == true) {
-                    checkedTravel = "\"Travel\""
-                } else {
-                    checkedTravel = ""
-                }
+            val travelChecked: Boolean = checkBoxTravel.isChecked
+            if (travelChecked == true) {
+                checkedTravel = "\"Travel\""
+            } else {
+                checkedTravel = ""
+            }
 
-   //             calendarFragment = CalendarFragment()
+            //             calendarFragment = CalendarFragment()
 
 
 //
@@ -251,40 +321,42 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
 //                    ).show()
 //                }
 
-                //var begin = eeentry.toString()
-                      var begin = calendarFragment.entryDate
-                var end = calendarFragment.endDate
+
+            //var begin = eeentry.toString()
+          var begin = calendarFragment.entryDate
+            var end = calendarFragment.endDate
 
 
 
 
-                Toast.makeText(this, "Search Button Clicked", Toast.LENGTH_SHORT).show()
-                //           Log.i("Texte affiché ", "$querytext, $checkedArt, $checkedPolitics, $checkedBusiness, $checkedSport, $checkedEntrepreneurs, $checkedTravel, $begin, $end ")
+            Toast.makeText(this, "Search Button Clicked", Toast.LENGTH_SHORT).show()
+            //           Log.i("Texte affiché ", "$querytext, $checkedArt, $checkedPolitics, $checkedBusiness, $checkedSport, $checkedEntrepreneurs, $checkedTravel, $begin, $end ")
 
-                //     Log.i("BEG", " $begin ")
-                var stringWithTermsForRequest =
-                    ("$checkedArt$checkedPolitics$checkedBusiness$checkedSport$checkedEntrepreneurs$checkedTravel").trim()
-                var termsForResearchApi = "$stringWithTermsForRequest".replace("\\s".toRegex(), "")
-
-
-                val stringForRequest =
-                    "https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=${begin}&end_date=$end&q=$querytext&fq=news_desk($termsForResearchApi)&sort=relevance&api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
-                Log.i("Textes", "$stringForRequest")
-
-                var intent = Intent(button.context, ResultSearchActivity::class.java)
-                // The string for the APi request to the server:
-                intent.putExtra(TERMS_FOR_RESEARCH_API, "$stringForRequest")
-
-                button_search.context.startActivity(intent)
+            //     Log.i("BEG", " $begin ")
+            var stringWithTermsForRequest =
+                ("$checkedArt$checkedPolitics$checkedBusiness$checkedSport$checkedEntrepreneurs$checkedTravel").trim()
+            var termsForResearchApi = "$stringWithTermsForRequest".replace("\\s".toRegex(), "")
 
 
-            })
+            val stringForRequest =
+                "https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=${entryDateAfterViewModel}&end_date=$endDateAfterViewModel&q=$querytext&fq=news_desk($termsForResearchApi)&sort=relevance&api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
+            Log.i("Textes", "$stringForRequest")
 
-        }
+            var intent = Intent(button.context, ResultSearchActivity::class.java)
+            // The string for the APi request to the server:
+            intent.putExtra(TERMS_FOR_RESEARCH_API, "$stringForRequest")
 
-         fun getBegin(newValue: String): String {
-            return newValue
-        }
+            button_search.context.startActivity(intent)
+
+
+        })
+
+
+    }
+
+    fun getBegin(newValue: String): String {
+        return newValue
+    }
 
 
 //    fun eeeentry(var calendarFragment: CalendarFragment, var entryDate : String) : String{
@@ -296,6 +368,7 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
 //        calendarFragment.entryDate
 //    }
 
-    }
+
+}
 
 

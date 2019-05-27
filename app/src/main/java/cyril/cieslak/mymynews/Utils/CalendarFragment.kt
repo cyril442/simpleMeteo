@@ -2,6 +2,8 @@ package cyril.cieslak.mymynews.Utils
 
 
 import android.app.DatePickerDialog
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 
 import cyril.cieslak.mymynews.R
+import cyril.cieslak.mymynews.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import java.lang.RuntimeException
 import java.util.*
@@ -21,13 +24,16 @@ import kotlin.properties.Delegates.observable
 
 class CalendarFragment : Fragment() {
 
+    private var sharedViewModel: SharedViewModel? = null
+
     lateinit var listener: CalendarFragmentListener
 
 
     var entryDate: String by Delegates.observable("11111111") { property, oldValue, newValue ->
-        Toast.makeText(context, " the old value was : $oldValue and the new one is : $newValue", Toast.LENGTH_SHORT)
-            .show()
+//        Toast.makeText(context, " the old value was : $oldValue and the new one is : $newValue", Toast.LENGTH_SHORT)
+////            .show()
 }
+
 
 
 
@@ -70,6 +76,14 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        // Creation of the ViewModel into the scope
+        activity?.let {
+            /**
+             *  create view model in activity scope
+             */
+            sharedViewModel = ViewModelProviders.of(it).get(SharedViewModel::class.java)
+        }
+
        // 1) Calendar
 
         val calendar = Calendar.getInstance()
@@ -109,7 +123,7 @@ class CalendarFragment : Fragment() {
 
                     Log.i("entry", entryDate)
 
-
+                    sharedViewModel?.inputEntryDate?.postValue(entryDate)
 
                     Toast.makeText(activity, """$mDay - ${mMonth} - $mYear""", Toast.LENGTH_SHORT).show()
                 }, year, month, day)
@@ -149,6 +163,8 @@ class CalendarFragment : Fragment() {
                 endDate = resultEnd
                 listener.onDateEnd(endDate)
                 Log.i("end", endDate)
+
+                sharedViewModel?.inputEndDate?.postValue(endDate)
 
                 Toast.makeText(activity, """$mDay - ${mMonth} - $mYear""", Toast.LENGTH_SHORT).show()
             }, year, month, day)
