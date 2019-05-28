@@ -41,6 +41,35 @@ class MainActivity : AppCompatActivity() {
         var toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
+
+        // Set the Notification On or off
+        val work = OneTimeWorkRequestBuilder<NotificationWorker>()
+            .build()
+
+//        val work = PeriodicWorkRequestBuilder<NotificationWorker>(15, TimeUnit.MINUTES)
+//            .build()
+
+//        WorkManager.getInstance().cancelAllWork()
+        WorkManager.getInstance().enqueue(work)
+
+        WorkManager.getInstance().getStatusById(work.id)
+            .observe(this, Observer { workStatus ->
+            Log.i ("workStatus", "workstatus = $workStatus")
+
+                if (workStatus != null && !workStatus.state.isFinished) {
+                    Log.i("workStatus", "Not yet finished ")
+                    }
+            })
+
+//        WorkManager.getInstance().getStatusById(work.id)
+//            .observe(this, Observer { workStatus ->
+//                Log.i("workManager", "workstatus = $workStatus")
+//
+//                if (workStatus != null && !workStatus.state.isFinished) {
+//                    Log.i("workManager", "Not yet finished ")
+//                }
+//            })
+
     }
 
 
@@ -91,13 +120,10 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_about -> {
-//                notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                Toast.makeText(this, "About Button Clicked", Toast.LENGTH_SHORT).show()
-//                laNotification()
                 return true
             }
             R.id.action_help -> {
-                setTheNotificationOn()
                 Toast.makeText(this, "help Button Clicked", Toast.LENGTH_SHORT).show()
                 return true
             }
@@ -106,26 +132,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun setTheNotificationOn (){
-        // Set the Notification On or off
 
-        val immediateWork = OneTimeWorkRequestBuilder<NotificationWorker>()
-            .build()
 
-        val work = PeriodicWorkRequestBuilder<NotificationWorker>(15, TimeUnit.MINUTES)
-            .build()
 
-        WorkManager.getInstance().enqueue(work, immediateWork)
 
-        WorkManager.getInstance().getStatusById(work.id)
-            .observe(this, Observer { workStatus ->
-                Log.i("workManager", "workstatus = $workStatus" )
 
-                if (workStatus != null && !workStatus.state.isFinished){
-                    Log.i("workManager", "Not yet finished ")
-                }
-            })
-
-    }
 
 }
