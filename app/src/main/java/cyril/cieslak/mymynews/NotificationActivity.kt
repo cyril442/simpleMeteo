@@ -15,24 +15,31 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import cyril.cieslak.mymynews.Parsers.parseDatasNotification
 import kotlinx.android.synthetic.main.fragment_check_box.*
 import kotlinx.android.synthetic.main.fragment_notification_enable.*
 import kotlinx.android.synthetic.main.fragment_search_button.*
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class NotificationActivity : AppCompatActivity() {
+
+
+
 
     companion object {
         val TEXT_SIZE_ZERO = 0
         val TEXT_SIZE_ONE = 1
         val CHANNEL_ID = "channel_ID"
+
     }
 
 
     var editTextSize = TEXT_SIZE_ZERO
-
 
 
     lateinit var checkedArt: String
@@ -56,7 +63,7 @@ class NotificationActivity : AppCompatActivity() {
         // the FindViewById from the Fragments collected into the Notification Activity for Treatment before request HTTP to the server
         var editTextForSearch = findViewById<EditText>(R.id.edit_query)
 
-        // Enable Switch Button False to start until there is text and check from the checkbox
+        // Enable Switch Button to False at launch until there is text and check from the checkbox
         switch_notification_enable.isEnabled = false
 
         // --- EDIT TEXT VALUE --- ///
@@ -204,11 +211,124 @@ class NotificationActivity : AppCompatActivity() {
             }
         }
 
-        val newMainActivity = MainActivity()
+     //   val newMainactivity = MainActivity()
 
+        // Notifcation actived by the switch button
         switch_notification_enable.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
-              //  newMainActivity.setTheNotificationOn()
+            if (isChecked) {
+
+                // ---- Text for the Notification Search ---- //
+                var editTextForSearch = findViewById<TextView>(R.id.edit_query)
+                var queryText = editTextForSearch.text
+
+                // ---- Dates for the Notification Search ---- //
+                val sdf = SimpleDateFormat("yyyyMMdd")
+                var todayInMilliSeconds = Date().time
+                var yesterdayInMilliSeconds = todayInMilliSeconds - 86400000
+
+                val today = sdf.format(todayInMilliSeconds)
+                val yesterday = sdf.format(yesterdayInMilliSeconds)
+
+                Log.i("dateToday", " today is : $today and yesterday was $yesterday")
+
+                // ---- What are the CheckBoxes Checked? ---- //
+
+                var artsChecked: Boolean = checkBoxArts.isChecked
+                if (artsChecked == true) {
+                    checkedArt = "\"Arts\""
+                } else {
+                    checkedArt = ""
+                }
+
+                val politicsChecked: Boolean = checkBoxPolitics.isChecked
+                if (politicsChecked == true) {
+                    checkedPolitics = "\"Politics\""
+                } else {
+                    checkedPolitics = ""
+                }
+
+                val businessChecked: Boolean = checkBoxBusiness.isChecked
+                if (businessChecked == true) {
+                    checkedBusiness = "\"Business\""
+                } else {
+                    checkedBusiness = ""
+                }
+
+                val sportChecked: Boolean = checkBoxSport.isChecked
+                if (sportChecked == true) {
+                    checkedSport = "\"Sports\""
+                } else {
+                    checkedSport = ""
+                }
+
+                val entrepreneursChecked: Boolean = checkBoxEntrepreneurs.isChecked
+                if (entrepreneursChecked == true) {
+                    checkedEntrepreneurs = "\"Entrepreneurs\""
+                } else {
+                    checkedEntrepreneurs = ""
+                }
+
+                val travelChecked: Boolean = checkBoxTravel.isChecked
+                if (travelChecked == true) {
+                    checkedTravel = "\"Travel\""
+                } else {
+                    checkedTravel = ""
+                }
+
+                var stringWithTermsForRequest =
+                    ("$checkedArt$checkedPolitics$checkedBusiness$checkedSport$checkedEntrepreneurs$checkedTravel").trim()
+                var termsForResearchApi = "$stringWithTermsForRequest".replace("\\s".toRegex(), "")
+
+
+                val stringForRequest =
+                    "https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=${yesterday}&end_date=$today&q=$queryText&fq=news_desk($termsForResearchApi)&sort=relevance&api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
+                Log.i("Textes", "$stringForRequest")
+
+                // Save the StringForRequest
+                saveData(stringForRequest)
+                val saveStringForRequest = getData()
+
+
+                /// ----- Downloading the datas from the server ---- ////
+                val jsonDataPreview =
+                    ResultSearchActivity.JSONDownloaderResultSearchActivity(this, saveStringForRequest).execute().get()
+                Log.i("Textes", " la string to Parse : $jsonDataPreview")
+
+
+                /// ---- Parse The datas ---- ///
+                var datas = parseDatasNotification().parseDatasFromApi(jsonDataPreview)
+                Log.i("Textes", "voici les données récupérrées : $datas")
+
+
+                /// --- Build the Notification --- ///
+
+                fun sendNotification() {
+                    //Get an instance of NotificationManager//
+                    val mBuilder = NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                        .setContentTitle("New York Times")
+                        .setContentText("You have $datas new articles to read ")
+                    // Gets an instance of the NotificationManager service//
+                    val mNotificationManager =
+                        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    // When you issue multiple notifications about the same type of event,
+                    // it’s best practice for your app to try to update an existing notification
+                    // with this new information, rather than immediately creating a new notification.
+                    // If you want to update this notification at a later date, you need to assign it an ID.
+                    // You can then use this ID whenever you issue a subsequent notification.
+                    // If the previous notification is still visible, the system will update this existing notification,
+                    // rather than create a new one. In this example, the notification’s ID is 001//
+                    NotificationManager.IMPORTANCE_DEFAULT
+
+                    mNotificationManager.notify(1, mBuilder.build())
+
+                }
+
+                // Launch Notification
+                sendNotification()
+
+               // newMainactivity.setTheNotificationOn()
+             //   newsNotificationOn()
                 Log.i("textes", "La notification est activée par le bouton switch")
             } else {
                 Log.i("textes", "La notification est désactivée par le bouton switch")
@@ -220,137 +340,31 @@ class NotificationActivity : AppCompatActivity() {
 
     }
 
-   fun newsNotificationOn() {
-
-
-        // ---- Text for the Notification Search ---- //
-       var editTextForSearch = findViewById<TextView>(R.id.edit_query)
-        var queryText = editTextForSearch.text
-
-        // ---- Dates for the Notification Search ---- //
-        val sdf = SimpleDateFormat("yyyyMMdd")
-        var todayInMilliSeconds = Date().time
-        var yesterdayInMilliSeconds = todayInMilliSeconds - 86400000
-
-        val today = sdf.format(todayInMilliSeconds)
-        val yesterday = sdf.format(yesterdayInMilliSeconds)
-
-        Log.i("dateToday", " today is : $today and yesterday was $yesterday")
-
-        // ---- What are the CheckBoxes Checked? ---- //
-
-        var artsChecked: Boolean = checkBoxArts.isChecked
-        if (artsChecked == true) {
-            checkedArt = "\"Arts\""
-        } else {
-            checkedArt = ""
-        }
-
-        val politicsChecked: Boolean = checkBoxPolitics.isChecked
-        if (politicsChecked == true) {
-            checkedPolitics = "\"Politics\""
-        } else {
-            checkedPolitics = ""
-        }
-
-        val businessChecked: Boolean = checkBoxBusiness.isChecked
-        if (businessChecked == true) {
-            checkedBusiness = "\"Business\""
-        } else {
-            checkedBusiness = ""
-        }
-
-        val sportChecked: Boolean = checkBoxSport.isChecked
-        if (sportChecked == true) {
-            checkedSport = "\"Sports\""
-        } else {
-            checkedSport = ""
-        }
-
-        val entrepreneursChecked: Boolean = checkBoxEntrepreneurs.isChecked
-        if (entrepreneursChecked == true) {
-            checkedEntrepreneurs = "\"Entrepreneurs\""
-        } else {
-            checkedEntrepreneurs = ""
-        }
-
-        val travelChecked: Boolean = checkBoxTravel.isChecked
-        if (travelChecked == true) {
-            checkedTravel = "\"Travel\""
-        } else {
-            checkedTravel = ""
-        }
-
-        var stringWithTermsForRequest =
-            ("$checkedArt$checkedPolitics$checkedBusiness$checkedSport$checkedEntrepreneurs$checkedTravel").trim()
-        var termsForResearchApi = "$stringWithTermsForRequest".replace("\\s".toRegex(), "")
-
-
-        val stringForRequest =
-            "https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=${yesterday}&end_date=$today&q=$queryText&fq=news_desk($termsForResearchApi)&sort=relevance&api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
-        Log.i("Textes", "$stringForRequest")
-
-        // Save the StringForRequest
-       saveData(stringForRequest)
-       val saveStringForRequest = getData()
-
-
-
-       /// ----- Downloading the datas from the server ---- ////
-       val jsonDataPreview = ResultSearchActivity.JSONDownloaderResultSearchActivity(this, saveStringForRequest).execute().get()
-       Log.i("Textes", " la string to Parse : $jsonDataPreview")
-
-
-       /// ---- Parse The datas ---- ///
-       var datas = parseDatasNotification().parseDatasFromApi(jsonDataPreview)
-       Log.i("Textes", "voici les données récupérrées : $datas")
-
-
-
-       /// --- Build the Notification --- ///
-
-       fun sendNotification() {
-           //Get an instance of NotificationManager//
-           val mBuilder = NotificationCompat.Builder(this)
-               .setSmallIcon(R.drawable.ic_launcher_foreground)
-               .setContentTitle("New York Times")
-               .setContentText("You have $datas new articles to read ")
-           // Gets an instance of the NotificationManager service//
-           val mNotificationManager =
-               getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-           // When you issue multiple notifications about the same type of event,
-           // it’s best practice for your app to try to update an existing notification
-           // with this new information, rather than immediately creating a new notification.
-           // If you want to update this notification at a later date, you need to assign it an ID.
-           // You can then use this ID whenever you issue a subsequent notification.
-           // If the previous notification is still visible, the system will update this existing notification,
-           // rather than create a new one. In this example, the notification’s ID is 001//
-           NotificationManager.IMPORTANCE_DEFAULT
-
-           mNotificationManager.notify(1, mBuilder.build())
-
-       }
-
-       // Launch Notification
-       sendNotification()
-    }
+//    fun newsNotificationOn() {
+//
+//
+//
+//    }
 
     // Saving in Shared Preferences the Last StringForRequest created //
-    fun saveData(stringForRequest : String) {
+    fun saveData(stringForRequest: String) {
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE) ?: return
         with(sharedPref.edit()) {
             putString("stringForRequest", "$stringForRequest")
             commit()
         }
     }
+
     // Retrieving the last stringForRequest saved into Shared Preferences
-    fun getData() : String {
+    fun getData(): String {
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE) ?: return ""
         val strStringForRequest = sharedPref.getString("stringForRequest", "")
         val strForStringForRequest = strStringForRequest.toString()
-      //  Toast.makeText(this, " Voici la string sauvée en SharedPreferences : $str_stringForRequest", Toast.LENGTH_LONG).show()
+        //  Toast.makeText(this, " Voici la string sauvée en SharedPreferences : $str_stringForRequest", Toast.LENGTH_LONG).show()
         Log.i("NotificationActivity", " Voici la string sauvée : $strStringForRequest")
-        return  strForStringForRequest
+        return strForStringForRequest
     }
+
+
 
 }
