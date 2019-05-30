@@ -1,5 +1,7 @@
 package cyril.cieslak.mymynews.Parsers
 
+import android.content.Context
+import android.widget.Toast
 import cyril.cieslak.mymynews.Fragments.FragmentTopStories
 import org.json.JSONException
 import org.json.JSONObject
@@ -15,6 +17,7 @@ class parseDatasResultSearchActivity () {
     val FIRST_ELEMENT_OF_THE_INDEX = 0
     val PRE_IMAGE_URL = "https://static01.nyt.com/"
     val DUMB_PICTURE_WHEN_NO_PIC_TO_DOWNLOAD = "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
+
 
     var datas = mutableListOf(
         mutableListOf<String>(
@@ -111,6 +114,9 @@ class parseDatasResultSearchActivity () {
                 }
                 val data =
                     mutableListOf<String>(section, subsectionReadyToPrint, title, dateToPrint, urlToPrint, urlArticle)
+
+
+
                 datas.add(data)
 
 

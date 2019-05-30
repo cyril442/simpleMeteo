@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar
 import android.view.KeyEvent
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.LinearLayout
 
 class WebViewActivity : AppCompatActivity() {
 
@@ -30,7 +31,8 @@ class WebViewActivity : AppCompatActivity() {
         val settings = webView.settings
         settings.javaScriptEnabled = true
 
-        webView.setBackgroundColor(Color.YELLOW)
+       webView.setBackgroundColor(Color.GREEN)
+
 
 
         val link = intent.getStringExtra(ItemNewsAdapter.ViewHolder.URL_ARTICLE_LINK)

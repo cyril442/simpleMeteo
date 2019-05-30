@@ -351,7 +351,7 @@ class NotificationActivity : AppCompatActivity() {
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE) ?: return
         with(sharedPref.edit()) {
             putString("stringForRequest", "$stringForRequest")
-            commit()
+            apply()
         }
     }
 
