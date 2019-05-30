@@ -18,4 +18,8 @@
     <string name="checkbox_travel">Travel</string>
     <string name="search_button_search_activity">SEARCH</string>
     <string name="Notifications">Notifications</string>
+    
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
+
 </resources>

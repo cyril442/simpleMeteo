@@ -3,15 +3,24 @@ package cyril.cieslak.mymynews
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.content.Intent
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.NavigationView
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.view.GravityCompat
+import android.support.v4.view.ViewPager
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Switch
 import android.widget.Toast
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
@@ -22,12 +31,21 @@ import cyril.cieslak.mymynews.Fragments.FragmentSports
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+
+
+
+    lateinit var drawer : DrawerLayout
 
     @SuppressLint("WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Color of the background
+     //   root_layout_main_activity.setBackgroundColor(Color.BLUE)
 
         // Page Adapter
         val adapter = MyViewPagerAdapter(supportFragmentManager)
@@ -40,6 +58,20 @@ class MainActivity : AppCompatActivity() {
         // 1) Set the Custom Toolbar to the MainActivity
         var toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        // Set the MenuDrawer icon clickable
+        drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+        var toggle : ActionBarDrawerToggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer.addDrawerListener(toggle)
+        toggle.syncState()
+
+        var navigationView = findViewById<NavigationView>(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener(this)
+
+        // Manage the NavigationView with TabLayout and viewPager
+        var tabLayout = findViewById<TabLayout>(R.id.tabs)
+        var  pager = findViewById<ViewPager>(R.id.viewPager)
+
 
 
         // Set the Notification On or off
@@ -73,6 +105,49 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+
+            R.id.nav_topstories -> {
+                Toast.makeText(this, "Top Stories", Toast.LENGTH_SHORT).show()
+                viewPager.setCurrentItem(0)
+            }
+
+
+            R.id.nav_mostpopular -> {
+                Toast.makeText(this, "Most Popular", Toast.LENGTH_SHORT).show()
+                viewPager.setCurrentItem(1)
+            }
+            R.id.nav_sports -> {
+                Toast.makeText(this, "Sports", Toast.LENGTH_SHORT).show()
+                viewPager.setCurrentItem(2)
+            }
+
+            R.id.nav_search -> {
+                Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, SearchActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_notification -> {
+                Toast.makeText(this, "Notification", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, NotificationActivity::class.java)
+                startActivity(intent)
+            }
+
+            else -> return onNavigationItemSelected(item)
+        }
+
+        drawer.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+    override fun onBackPressed() {
+
+        if(drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+        super.onBackPressed()}
+    }
 
 
     // CLASS To MANAGE the PageAdapter
@@ -132,8 +207,6 @@ class MainActivity : AppCompatActivity() {
             else -> return super.onOptionsItemSelected(item)
         }
     }
-
-
 
 
 
