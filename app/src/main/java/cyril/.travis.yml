@@ -1,16 +1,15 @@
 language: android
 
-#components:
-#    - android-28
-#    - build-tools-28.0.0
+components:
+    - android-28
+    - build-tools-28.0.0
 
-#
-#env:
-#  global:
-#    # install timeout in minutes (2 minutes by default)
-#    - ADB_INSTALL_TIMEOUT=8
+
+env:
+  global:
+    # install timeout in minutes (2 minutes by default)
+    - ADB_INSTALL_TIMEOUT=8
 
 # Run assemble and unit tests
 script:
-  - mvn test
-#  - ./gradlew clean assembleDebug assembleRelease testDebug
+  - ./gradlew clean assembleDebug assembleRelease testDebug
