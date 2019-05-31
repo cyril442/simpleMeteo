@@ -21,15 +21,11 @@ import kotlin.properties.Delegates
 
 class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentListener {
 
-
-
     companion object {
         val TERMS_FOR_RESEARCH_API = "TermsForResearchApi"
         val TEXT_SIZE_ZERO = 0
         val TEXT_SIZE_ONE = 1
-
     }
-
 
     lateinit var calendarFragment: CalendarFragment
     var editTextSize = TEXT_SIZE_ZERO
@@ -205,37 +201,40 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
         var validCheckBoxString = theCheckBoxStringTrueFalse.contains("true", ignoreCase = false)
 
 
-
         // VIEW MODEL TO COLLECT THE DATES FROM THE FRAGMENT
         // ShareViewModel entering the scope of SearchActivity
         val sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
 
         var entryDateAfterViewModel: String by Delegates.observable("11111111") { property, oldValue, newValue ->
-            Toast.makeText(this, " the old value was : $oldValue and the new one is ENTRYDATEAFTERVIEWMODEL : $newValue", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                this,
+                " the old value was : $oldValue and the new one is ENTRYDATEAFTERVIEWMODEL : $newValue",
+                Toast.LENGTH_SHORT
+            )
                 .show()
         }
 
         var endDateAfterViewModel: String by Delegates.observable("22222222") { property, oldValue, newValue ->
-            Toast.makeText(this, " the old value was : $oldValue and the new one is ENDDATEATERVIEWMODEL : $newValue", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                this,
+                " the old value was : $oldValue and the new one is ENDDATEATERVIEWMODEL : $newValue",
+                Toast.LENGTH_SHORT
+            )
                 .show()
         }
 
 
 
 
-            sharedViewModel.inputEntryDate.observe(this, Observer {
-                it?.let {
-                    getBegin(it)
-                    var begin = "$it"
-                    Log.i("SearchActivity", "value of Begin Second : $begin")
-                    entryDateAfterViewModel = begin
+        sharedViewModel.inputEntryDate.observe(this, Observer {
+            it?.let {
+              //  getBegin(it)
+                var begin = "$it"
+                Log.i("SearchActivity", "value of Begin Second : $begin")
+                entryDateAfterViewModel = begin
 
-                }
-            })
-
-
-
-
+            }
+        })
 
 
         sharedViewModel.inputEndDate.observe(this, Observer {
@@ -247,17 +246,9 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
             }
         })
 
-
-//
-//            if (editTextSize >= 1 && validCheckBoxString) {
-//                Toast.makeText(this, "Ready to Make the Button Enable", Toast.LENGTH_SHORT).show()
-//            }
-
-
         // OnClick of the button Search
         button.setOnClickListener(View.OnClickListener {
-            //// //// //// Toast to test the output of the lengthArt and sizeArt ///
-            ////  Toast.makeText(this,"$checkboxAtLeastOnIsChecked",Toast.LENGTH_SHORT).show()
+
 
 
             Log.i(
@@ -309,30 +300,9 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
                 checkedTravel = ""
             }
 
-            //             calendarFragment = CalendarFragment()
-
-
-//
-//                var begin: String by Delegates.observable("20190101") { property, oldValue, newValue ->
-//                    Toast.makeText(
-//                        this,
-//                        " the old value was : $oldValue and the new one is : $newValue",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-
-
-            //var begin = eeentry.toString()
-          var begin = calendarFragment.entryDate
-            var end = calendarFragment.endDate
-
-
-
-
             Toast.makeText(this, "Search Button Clicked", Toast.LENGTH_SHORT).show()
-            //           Log.i("Texte affiché ", "$querytext, $checkedArt, $checkedPolitics, $checkedBusiness, $checkedSport, $checkedEntrepreneurs, $checkedTravel, $begin, $end ")
 
-            //     Log.i("BEG", " $begin ")
+
             var stringWithTermsForRequest =
                 ("$checkedArt$checkedPolitics$checkedBusiness$checkedSport$checkedEntrepreneurs$checkedTravel").trim()
             var termsForResearchApi = "$stringWithTermsForRequest".replace("\\s".toRegex(), "")
@@ -353,21 +323,6 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
 
 
     }
-
-    fun getBegin(newValue: String): String {
-        return newValue
-    }
-
-
-//    fun eeeentry(var calendarFragment: CalendarFragment, var entryDate : String) : String{
-//
-//        return eeeentry()
-
-//    var eeentry = CalendarFragment.apply {
-//        calendarFragment = CalendarFragment()
-//        calendarFragment.entryDate
-//    }
-
 
 }
 

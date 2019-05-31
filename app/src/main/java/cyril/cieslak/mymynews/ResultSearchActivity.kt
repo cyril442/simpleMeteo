@@ -99,8 +99,6 @@ class ResultSearchActivity : AppCompatActivity() {
     }
 
 
-
-
     class TopStoryData(
         private var m_title: String,
         private var m_section: String,
@@ -273,16 +271,16 @@ class ResultSearchActivity : AppCompatActivity() {
 
     }
 
-    fun popup () {
+    fun popup() {
 
         // IF NO DATAS TO SHOW -> POP UP TO Say it
-        if( datas.size <= 0){
+        if (datas.size <= 0) {
             Toast.makeText(this, "Pas de données à afficher", Toast.LENGTH_SHORT).show()
 
             // >POP UP TO LAUNCH
             val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             // Inflate a custom view using layout inflater
-            val view = inflater.inflate(R.layout.popup_layout, root_layout_main_activity )
+            val view = inflater.inflate(R.layout.popup_layout, root_layout_main_activity)
             // Initialize a new instance of popup window
             val popupWindow = PopupWindow(
                 view, // Custom view to show in popup window
@@ -297,7 +295,7 @@ class ResultSearchActivity : AppCompatActivity() {
 
 
             // If API level 23 or higher then execute the code
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 // Create a new slide animation for popup window enter transition
                 val slideIn = Slide()
                 slideIn.slideEdge = Gravity.TOP
