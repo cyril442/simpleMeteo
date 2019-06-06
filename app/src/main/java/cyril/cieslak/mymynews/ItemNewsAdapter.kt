@@ -58,7 +58,7 @@ class ItemNewsAdapter(val datas: List<MutableList<String>>) : RecyclerView.Adapt
         val data = datas[position]
 
         //  holder.icon.setImageResource(R.mipmap.ic_launcher)
-        Picasso.get()?.load(datas[position][4])?.placeholder(R.mipmap.ic_launcher_round)?.error(R.mipmap.ic_launcher)?.into(holder.icon)
+        Picasso.get()?.load(datas[position][4])?.placeholder(R.drawable.logo_nyt_400x400)?.error(R.mipmap.ic_launcher)?.into(holder.icon)
         holder?.section?.text = datas[position][0]
         holder?.subsection?.text = datas[position][1]
         holder?.date?.text = datas[position][3]
