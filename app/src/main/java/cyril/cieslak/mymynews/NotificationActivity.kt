@@ -18,7 +18,11 @@ import android.widget.Toast
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.Worker
 import cyril.cieslak.mymynews.Parsers.parseDatasNotification
+import cyril.cieslak.mymynews.UtilsClass.JSONDownloaderResultSearchActivity
+import cyril.cieslak.mymynews.UtilsClass.checkBoxEmptyOrNot
+import cyril.cieslak.mymynews.UtilsClass.termsForResearchApi
 import kotlinx.android.synthetic.main.fragment_check_box.*
 import kotlinx.android.synthetic.main.fragment_notification_enable.*
 import kotlinx.android.synthetic.main.fragment_search_button.*
@@ -27,8 +31,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class NotificationActivity : AppCompatActivity() {
-
-
 
 
     companion object {
@@ -66,160 +68,79 @@ class NotificationActivity : AppCompatActivity() {
         // Enable Switch Button to False at launch until there is text and check from the checkbox
         switch_notification_enable.isEnabled = false
 
+        // Set the State of The checkbox when the NotificationActivity is OnCreate
+        checkBoxArts.isEnabled = false
+        checkBoxBusiness.isEnabled = false
+        checkBoxEntrepreneurs.isEnabled = false
+        checkBoxPolitics.isEnabled = false
+        checkBoxSport.isEnabled = false
+        checkBoxTravel.isEnabled = false
+
+        // Test Edit Text has value and At least one Checkbox is checked
         // --- EDIT TEXT VALUE --- ///
         editTextForSearch.addTextChangedListener(object : TextWatcher {
+
+
             override fun afterTextChanged(s: Editable?) {
-                editTextSize = TEXT_SIZE_ZERO
-                if (editTextForSearch.length() >= TEXT_SIZE_ONE) {
-                    editTextSize = editTextForSearch.length()
-                    Toast.makeText(
-                        baseContext,
-                        "Ce n'est pas vide! Nombre de caractères : $editTextSize",
-                        Toast.LENGTH_SHORT
-                    ).show()
+
+                editTextSize = editTextForSearch.length()
+
+                when (editTextSize) {
+                    TEXT_SIZE_ZERO -> {
+                        switch_notification_enable.isEnabled = false
+                        switch_notification_enable.setBackgroundResource(R.color.colorPrimary)
+
+                        checkBoxArts.isEnabled = false
+                        checkBoxBusiness.isEnabled = false
+                        checkBoxEntrepreneurs.isEnabled = false
+                        checkBoxPolitics.isEnabled = false
+                        checkBoxSport.isEnabled = false
+                        checkBoxTravel.isEnabled = false
+
+                        checkBoxArts.isChecked = false
+                        checkBoxBusiness.isChecked = false
+                        checkBoxEntrepreneurs.isChecked = false
+                        checkBoxPolitics.isChecked = false
+                        checkBoxSport.isChecked = false
+                        checkBoxTravel.isChecked = false
+
+                    }
+                    else -> {
+                        checkBoxArts.isEnabled = true
+                        checkBoxBusiness.isEnabled = true
+                        checkBoxEntrepreneurs.isEnabled = true
+                        checkBoxPolitics.isEnabled = true
+                        checkBoxSport.isEnabled = true
+                        checkBoxTravel.isEnabled = true
+                    }
                 }
+
+
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                editTextSize = TEXT_SIZE_ZERO
+
+
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                editTextSize = TEXT_SIZE_ZERO
-                if (editTextForSearch.length() >= TEXT_SIZE_ONE) {
-                    editTextSize = editTextForSearch.length()
-                    Toast.makeText(baseContext, "le nombre de caractères  est de $editTextSize", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
+
+
+        }
+
 
         })
 
-        //    Log.i("editText", " editTextSize est égal à : $editTextSize")
 
-
-        ///// --- CHECK BOX Tested Empty or Not --- ///////
-
-        var artsIsCheckedOrNot = false
-        var businessIsCheckedOrNot = false
-        var entrepreneursIsCheckedOrNot = false
-        var politicsIsCheckedOrNot = false
-        var sportsIsCheckedOrNot = false
-        var travelIsCheckedOrNot = false
-
-//        var checkedArt = ""
-//        var checkedPolitics = ""
-//        var checkedBusiness = ""
-//        var checkedSport = ""
-//        var checkedEntrepreneurs = ""
-//        var checkedTravel = ""
-
-        checkBoxArts.setOnClickListener {
-            if (!checkBoxArts.isChecked) {
-                artsIsCheckedOrNot = false
-            } else {
-                artsIsCheckedOrNot = true
-            }
-            Toast.makeText(this, "$artsIsCheckedOrNot", Toast.LENGTH_SHORT).show()
-            if (editTextSize >= 1 && artsIsCheckedOrNot) {
-                Toast.makeText(this, "Ready to Make the Button Enable because Arts is Checked", Toast.LENGTH_SHORT)
-                    .show()
-                switch_notification_enable.isEnabled = true
-                switch_notification_enable.setBackgroundColor(Color.BLUE)
-            }
-        }
-
-        checkBoxBusiness.setOnClickListener {
-            if (!checkBoxBusiness.isChecked) {
-                businessIsCheckedOrNot = false
-            } else {
-                businessIsCheckedOrNot = true
-            }
-            Toast.makeText(this, "$businessIsCheckedOrNot", Toast.LENGTH_SHORT).show()
-            if (editTextSize >= 1 && businessIsCheckedOrNot == true) {
-                Toast.makeText(this, "Ready to Make the Button Enable because Business is Checked", Toast.LENGTH_SHORT)
-                    .show()
-                switch_notification_enable.isEnabled = true
-                switch_notification_enable.setBackgroundColor(Color.BLUE)
-
-            }
-        }
-
-        checkBoxEntrepreneurs.setOnClickListener {
-            if (!checkBoxEntrepreneurs.isChecked) {
-                entrepreneursIsCheckedOrNot = false
-            } else {
-                entrepreneursIsCheckedOrNot = true
-            }
-            Toast.makeText(this, "$entrepreneursIsCheckedOrNot", Toast.LENGTH_SHORT).show()
-            if (editTextSize >= 1 && entrepreneursIsCheckedOrNot == true) {
-                Toast.makeText(
-                    this,
-                    "Ready to Make the Button Enable because Entrepreneurs is Checked",
-                    Toast.LENGTH_SHORT
-                ).show()
-                switch_notification_enable.isEnabled = true
-                switch_notification_enable.setBackgroundColor(Color.BLUE)
-            }
-        }
-
-        checkBoxPolitics.setOnClickListener {
-            if (!checkBoxPolitics.isChecked) {
-                politicsIsCheckedOrNot = false
-            } else {
-                politicsIsCheckedOrNot = true
-            }
-            Toast.makeText(this, "$politicsIsCheckedOrNot", Toast.LENGTH_SHORT).show()
-            if (editTextSize >= 1 && politicsIsCheckedOrNot == true) {
-                Toast.makeText(this, "Ready to Make the Button Enable because politics is Checked", Toast.LENGTH_SHORT)
-                    .show()
-                switch_notification_enable.isEnabled = true
-                switch_notification_enable.setBackgroundColor(Color.BLUE)
-
-            }
-        }
-
-        checkBoxSport.setOnClickListener {
-            if (!checkBoxSport.isChecked) {
-                sportsIsCheckedOrNot = false
-            } else {
-                sportsIsCheckedOrNot = true
-            }
-            Toast.makeText(this, "$sportsIsCheckedOrNot", Toast.LENGTH_SHORT).show()
-            if (editTextSize >= 1 && sportsIsCheckedOrNot == true) {
-                Toast.makeText(this, "Ready to Make the Button Enable because Sport is Checked", Toast.LENGTH_SHORT)
-                    .show()
-                switch_notification_enable.isEnabled = true
-                switch_notification_enable.setBackgroundColor(Color.BLUE)
-
-            }
-        }
-
-        checkBoxTravel.setOnClickListener {
-            if (!checkBoxTravel.isChecked) {
-                travelIsCheckedOrNot = false
-            } else {
-                travelIsCheckedOrNot = true
-            }
-            Toast.makeText(this, "$travelIsCheckedOrNot", Toast.LENGTH_SHORT).show()
-            if (editTextSize >= 1 && travelIsCheckedOrNot == true) {
-                Toast.makeText(this, "Ready to Make the Button Enable because Travel is Checked", Toast.LENGTH_SHORT)
-                    .show()
-                switch_notification_enable.isEnabled = true
-                switch_notification_enable.setBackgroundColor(Color.BLUE)
-
-            }
-        }
-
-     //   val newMainactivity = MainActivity()
+        //  add the class CHECKBOX EMPTY OR NOT /// SWITCH_NOTIFICATION_ENABLE is equal to BUTTON_SEARCH in the class "CheckBoxEmpntyOrNot"
+        checkBoxEmptyOrNot().checkBoxStatus(
+            switch_notification_enable, checkBoxArts, checkBoxBusiness,
+            checkBoxEntrepreneurs, checkBoxPolitics, checkBoxSport, checkBoxTravel
+        )
 
         // Notifcation actived by the switch button
         switch_notification_enable.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-
-                // ---- Text for the Notification Search ---- //
-                var editTextForSearch = findViewById<TextView>(R.id.edit_query)
-                var queryText = editTextForSearch.text
 
                 // ---- Dates for the Notification Search ---- //
                 val sdf = SimpleDateFormat("yyyyMMdd")
@@ -231,57 +152,21 @@ class NotificationActivity : AppCompatActivity() {
 
                 Log.i("dateToday", " today is : $today and yesterday was $yesterday")
 
-                // ---- What are the CheckBoxes Checked? ---- //
 
-                var artsChecked: Boolean = checkBoxArts.isChecked
-                if (artsChecked == true) {
-                    checkedArt = "\"Arts\""
-                } else {
-                    checkedArt = ""
-                }
-
-                val politicsChecked: Boolean = checkBoxPolitics.isChecked
-                if (politicsChecked == true) {
-                    checkedPolitics = "\"Politics\""
-                } else {
-                    checkedPolitics = ""
-                }
-
-                val businessChecked: Boolean = checkBoxBusiness.isChecked
-                if (businessChecked == true) {
-                    checkedBusiness = "\"Business\""
-                } else {
-                    checkedBusiness = ""
-                }
-
-                val sportChecked: Boolean = checkBoxSport.isChecked
-                if (sportChecked == true) {
-                    checkedSport = "\"Sports\""
-                } else {
-                    checkedSport = ""
-                }
-
-                val entrepreneursChecked: Boolean = checkBoxEntrepreneurs.isChecked
-                if (entrepreneursChecked == true) {
-                    checkedEntrepreneurs = "\"Entrepreneurs\""
-                } else {
-                    checkedEntrepreneurs = ""
-                }
-
-                val travelChecked: Boolean = checkBoxTravel.isChecked
-                if (travelChecked == true) {
-                    checkedTravel = "\"Travel\""
-                } else {
-                    checkedTravel = ""
-                }
-
-                var stringWithTermsForRequest =
-                    ("$checkedArt$checkedPolitics$checkedBusiness$checkedSport$checkedEntrepreneurs$checkedTravel").trim()
-                var termsForResearchApi = "$stringWithTermsForRequest".replace("\\s".toRegex(), "")
+                // External class "termsForResearchAPi()" with 2 functions to collect the editText and the Checkbox checked
+                var stringTermsForResearchApi: String = termsForResearchApi().termsForR(
+                    checkBoxArts,
+                    checkBoxBusiness,
+                    checkBoxEntrepreneurs,
+                    checkBoxPolitics,
+                    checkBoxSport,
+                    checkBoxTravel
+                )
+                var queryText: String = termsForResearchApi().query(editTextForSearch)
 
 
                 val stringForRequest =
-                    "https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=${yesterday}&end_date=$today&q=$queryText&fq=news_desk($termsForResearchApi)&sort=relevance&api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
+                    "https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=${yesterday}&end_date=$today&q=$queryText&fq=news_desk($stringTermsForResearchApi)&sort=relevance&api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
                 Log.i("Textes", "$stringForRequest")
 
                 // Save the StringForRequest
@@ -291,7 +176,7 @@ class NotificationActivity : AppCompatActivity() {
 
                 /// ----- Downloading the datas from the server ---- ////
                 val jsonDataPreview =
-                    ResultSearchActivity.JSONDownloaderResultSearchActivity(this, saveStringForRequest).execute().get()
+                    JSONDownloaderResultSearchActivity(this, saveStringForRequest).execute().get()
                 Log.i("Textes", " la string to Parse : $jsonDataPreview")
 
 
@@ -327,10 +212,10 @@ class NotificationActivity : AppCompatActivity() {
                 // Launch Notification
                 sendNotification()
 
-               // newMainactivity.setTheNotificationOn()
-             //   newsNotificationOn()
                 Log.i("textes", "La notification est activée par le bouton switch")
             } else {
+
+
                 Log.i("textes", "La notification est désactivée par le bouton switch")
 
             }
@@ -340,11 +225,6 @@ class NotificationActivity : AppCompatActivity() {
 
     }
 
-//    fun newsNotificationOn() {
-//
-//
-//
-//    }
 
     // Saving in Shared Preferences the Last StringForRequest created //
     fun saveData(stringForRequest: String) {
@@ -364,7 +244,5 @@ class NotificationActivity : AppCompatActivity() {
         Log.i("NotificationActivity", " Voici la string sauvée : $strStringForRequest")
         return strForStringForRequest
     }
-
-
 
 }
