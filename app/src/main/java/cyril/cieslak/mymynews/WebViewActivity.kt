@@ -31,9 +31,7 @@ class WebViewActivity : AppCompatActivity() {
         val settings = webView.settings
         settings.javaScriptEnabled = true
 
-       webView.setBackgroundColor(Color.GREEN)
-
-
+        webView.setBackgroundColor(Color.GREEN)
 
         val link = intent.getStringExtra(ItemNewsAdapter.ViewHolder.URL_ARTICLE_LINK)
 
