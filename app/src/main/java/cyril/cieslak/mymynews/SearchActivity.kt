@@ -49,13 +49,13 @@ import kotlin.properties.Delegates
 
 class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentListener {
 
-    //   private var sharedViewModel: SharedViewModel? = null
-
     companion object {
         val TERMS_FOR_RESEARCH_API = "TermsForResearchApi"
         val TEXT_SIZE_ZERO = 0
         val TEXT_SIZE_ONE = 1
         val TEXT_MINUS_ONE = -1
+        val INITIAL_ENTRY_DATE = "20120216"
+        val INITIAL_END_DATE = "20160621"
     }
 
     lateinit var calendarFragment: CalendarFragment
@@ -154,7 +154,7 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
         // ShareViewModel entering the scope of SearchActivity -> ViewModel used to pass datas from Fragment To Activity
         val sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
 
-        var entryDateAfterViewModel: String by Delegates.observable("20120216") { property, oldValue, newValue ->
+        var entryDateAfterViewModel: String by Delegates.observable(INITIAL_ENTRY_DATE) { property, oldValue, newValue ->
             Toast.makeText(
                 this,
                 " the old value was : $oldValue and the new one is ENTRYDATEAFTERVIEWMODEL : $newValue",
@@ -163,7 +163,7 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
                 .show()
         }
 
-        var endDateAfterViewModel: String by Delegates.observable("20160621") { property, oldValue, newValue ->
+        var endDateAfterViewModel: String by Delegates.observable(INITIAL_END_DATE) { property, oldValue, newValue ->
             Toast.makeText(
                 this,
                 " the old value was : $oldValue and the new one is ENDDATEATERVIEWMODEL : $newValue",
@@ -171,6 +171,7 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
             )
                 .show()
         }
+
 
 
 

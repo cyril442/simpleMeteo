@@ -141,16 +141,13 @@ class JSONDownloaderResultSearchActivity(private var c: Context, private var jso
             ).show()
 
         } else {
-            // PARSE
-//                Toast.makeText(
-//                    c,
-//                    "Network Connection and Download Succesfull. Now Attempting to Parse",
-//                    Toast.LENGTH_LONG
-//                ).show()
-            bingo = jsonData
-            //   Toast.makeText(c, "$bingo", Toast.LENGTH_LONG).show()
+            // Ready to PARSE
+                Toast.makeText(
+                    c,
+                    "Network Connection and Download Succesfull. Now Ready to Parse",
+                    Toast.LENGTH_LONG
+                ).show()
 
-            // JSONParser(c, jsonData, myGridView).execute()
         }
 
 

@@ -45,25 +45,24 @@ class ResultSearchActivity : AppCompatActivity() {
 
     var datas = mutableListOf(
         mutableListOf<String>(
-            "un",
-            "deux",
-            "trois",
-            "quatre",
-            "cinq",
+            "one",
+            "two",
+            "three",
+            "four",
+            "five",
             "six",
-            "sept",
-            "huit",
-            "neuf",
-            "dix",
-            "onze",
-            "douze",
-            "treize",
-            "quatorze",
-            "quinze"
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "eleven",
+            "twelve",
+            "thirteen",
+            "fourteen",
+            "fifteen"
         )
     )
 
-      var adapter = ItemNewsAdapter(datas)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,45 +74,12 @@ class ResultSearchActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
 
-        // ShareViewModel entering the scope of ResultSearchActivity
-  //      val sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
-
-        // Observable
-//        var datasAfterViewModel: MutableList<MutableList<String>> by Delegates.observable(datas) { property, oldValue, newValue ->
-//            datasAfterViewModelnewValue(newValue)
-//        }
-
-//        var datasAfterViewModelAndNewValues = datasAfterViewModelnewValue(newValues = datasAfterViewModel)
-//
-//        sharedViewModel.datasForResultSearchActivity.observe(this, Observer {
-//            it?.let {
-//                var datasResult = it
-//                datasAfterViewModel = datasResult
-//
-//            }
-
-  //      })
-
-
         //--- Retrieving the String from Search Activity ---//
         var datasBeforeParsing = intent.getStringExtra("jsonDataPreviewIntent")
 
 
-
-//        Toast.makeText(this, termsForResearchApiFromSearchActivity, Toast.LENGTH_LONG).show()
-//        Log.i("texte", "$termsForResearchApiFromSearchActivity")
-        //    val jsonResultSearchActivity = termsForResearchApiFromSearchActivity
-
-//        swipeRefreshLayout = findViewById(R.id.swiperefresh)
-//        swipeRefreshLayout.setOnRefreshListener()
-
-        // to get the String JSonData, we use the class JSONDownloaderResultSearchActivity
-        //     var jsonDataPreview = JSONDownloaderResultSearchActivity(this, jsonResultSearchActivity).execute().get()
-
-
-
         // To Parse the result of the JSONDownloadResultSearch using the external CLass parseDatas() which include the method parseDatasFromApi
-             datas = parseDatasResultSearchActivity().parseDatasFromApi(datasBeforeParsing)
+        datas = parseDatasResultSearchActivity().parseDatasFromApi(datasBeforeParsing)
 
 
         var adapter = ItemNewsAdapter(datas)
@@ -123,38 +89,6 @@ class ResultSearchActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
 
-
-
     }
-
-
-    class TopStoryData(
-        private var m_title: String,
-        private var m_section: String,
-        private var m_subsection: String,
-        private var m_updated_date: String
-    ) {
-
-        fun getTitle(): String {
-            return m_title
-        }
-
-        fun getSection(): String {
-            return m_section
-        }
-
-        fun getSubsection(): String {
-            return m_subsection
-        }
-
-        fun getUpdated_Date(): String {
-            return m_updated_date
-        }
-    }
-
-    fun datasAfterViewModelnewValue(newValues: MutableList<MutableList<String>>) : MutableList<MutableList<String>>  {
-    return newValues
-    }
-
 
 }
