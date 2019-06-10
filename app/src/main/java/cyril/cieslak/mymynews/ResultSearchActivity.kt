@@ -96,7 +96,10 @@ class ResultSearchActivity : AppCompatActivity() {
 
 
         //--- Retrieving the String from Search Activity ---//
-//        var datas : MutableList<MutableList<String>> = intent.getStringExtra(SearchActivity.TERMS_FOR_RESEARCH_API)
+        var datasBeforeParsing = intent.getStringExtra("jsonDataPreviewIntent")
+
+
+
 //        Toast.makeText(this, termsForResearchApiFromSearchActivity, Toast.LENGTH_LONG).show()
 //        Log.i("texte", "$termsForResearchApiFromSearchActivity")
         //    val jsonResultSearchActivity = termsForResearchApiFromSearchActivity
@@ -108,8 +111,9 @@ class ResultSearchActivity : AppCompatActivity() {
         //     var jsonDataPreview = JSONDownloaderResultSearchActivity(this, jsonResultSearchActivity).execute().get()
 
 
+
         // To Parse the result of the JSONDownloadResultSearch using the external CLass parseDatas() which include the method parseDatasFromApi
-        //     datas = parseDatasResultSearchActivity().parseDatasFromApi(jsonDataPreview)
+             datas = parseDatasResultSearchActivity().parseDatasFromApi(datasBeforeParsing)
 
 
         var adapter = ItemNewsAdapter(datas)

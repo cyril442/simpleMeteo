@@ -66,15 +66,6 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        // Creation of the ViewModel into the scope
-//        this?.let {
-//            /**
-//             *  create view model in activity scope
-//             */
-//            sharedViewModel = ViewModelProviders.of(it).get(SharedViewModel::class.java)
-//        }
-
-
         // Setting of the Toolbar
         val toolbar = findViewById<Toolbar>(R.id.toolbar_search_activity)
         setSupportActionBar(toolbar)
@@ -160,7 +151,7 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
         )
 
         // VIEW MODEL TO COLLECT THE DATES FROM THE FRAGMENT
-        // ShareViewModel entering the scope of SearchActivity
+        // ShareViewModel entering the scope of SearchActivity -> ViewModel used to pass datas from Fragment To Activity
         val sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
 
         var entryDateAfterViewModel: String by Delegates.observable("20120216") { property, oldValue, newValue ->
@@ -223,39 +214,23 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
             Log.i("Textes", "$stringForRequest")
 
 
-            ///// HERE TO INSERT |||
-
-            //
             var jsonDataPreview = JSONDownloaderResultSearchActivity(this, stringForRequest).execute().get()
-            var resultDatas = parseDatasResultSearchActivity().parseDatasFromApi(jsonDataPreview)
 
-            var datas = resultDatas
-
-            //           sharedViewModel?.datasForResultSearchActivity?.postValue(datas)
-
-            var ping = saveDataGsonFromSearchAcivityToResultActivity(datas)
-
-            Log.i("SearchActivity", " the datas are : $datas")
-
-
-            //      var adapter = ItemNewsAdapter(datas)
-
-            //// THINK TO CHANGE THE VALUE OF THE INTENT
-
-            var intent = Intent(button.context, ResultSearchActivity::class.java)
-
-//            var bundle = Bundle().apply {
 //
-//            }
+            var intent = Intent(button.context, ResultSearchActivity::class.java)
+            intent.putExtra("jsonDataPreviewIntent", jsonDataPreview)
 
-            var sizeDatas = datas.toString().length
-            when (sizeDatas) {
 
-                -1, 0, 1, 2 -> popup(datas)
-                else -> button_search.context.startActivity(intent)
+            // When "url" is included into the String jsonDataPreview, then, it means that there are some results to show, and the string JsonDataPreview is sent at the ResultSearch Actovity for Parsing and adapter.
+            // When "url" is NOT included into the String jsonDataPreview, the popup() method os launched to notify the User and there is no opening of the ResultSearchActivity
+            Log.i("SizeDatas", "Voici les datas: $jsonDataPreview")
+            when (jsonDataPreview.contains("url", ignoreCase = true)) {
+                false -> popup()
+                true -> button_search.context.startActivity(intent)
 
             }
 
+            Log.i("SearchActivity", " the datas are : $jsonDataPreview")
 
         })
 
@@ -263,82 +238,61 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
     }
 
 
-    fun popup(datas: MutableList<MutableList<String>>) {
+    fun popup() {
 
         // IF NO DATAS TO SHOW -> POP UP TO Say it
-        if (datas.toString().length <= 2) {
-            Toast.makeText(this, "Pas de données à afficher", Toast.LENGTH_SHORT).show()
 
-            // >POP UP TO LAUNCH
-            val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            // Inflate a custom view using layout inflater
-            val view = inflater.inflate(R.layout.custom_popup, root_layout_main_activity)
-            // Initialize a new instance of popup window
-            val popupWindow = PopupWindow(
-                view, // Custom view to show in popup window
-                LinearLayout.LayoutParams.WRAP_CONTENT, // Width of popup window
-                LinearLayout.LayoutParams.WRAP_CONTENT // Window height
-            )
+        Toast.makeText(this, "Pas de données à afficher", Toast.LENGTH_SHORT).show()
 
-
-            // Set an elevation for the popup window
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                popupWindow.elevation = 10.0F
-            }
+        // >POP UP TO LAUNCH
+        val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        // Inflate a custom view using layout inflater
+        val view = inflater.inflate(R.layout.custom_popup, root_layout_main_activity)
+        // Initialize a new instance of popup window
+        val popupWindow = PopupWindow(
+            view, // Custom view to show in popup window
+            LinearLayout.LayoutParams.WRAP_CONTENT, // Width of popup window
+            LinearLayout.LayoutParams.WRAP_CONTENT // Window height
+        )
 
 
-            // If API level 23 or higher then execute the code
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                // Create a new slide animation for popup window enter transition
-                val slideIn = Slide()
-                slideIn.slideEdge = Gravity.TOP
-                popupWindow.enterTransition = slideIn
-
-                // Slide animation for popup window exit transition
-                val slideOut = Slide()
-                slideOut.slideEdge = Gravity.RIGHT
-                popupWindow.exitTransition = slideOut
-
-            }
+        // Set an elevation for the popup window
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            popupWindow.elevation = 10.0F
+        }
 
 
-            TransitionManager.beginDelayedTransition(root_layout_search_activity)
-            popupWindow.showAtLocation(
-                root_layout_search_activity, // Location to display popup window
-                Gravity.CENTER, // Exact position of layout to display popup
-                0, // X offset
-                0 // Y offset
-            )
+        // If API level 23 or higher then execute the code
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Create a new slide animation for popup window enter transition
+            val slideIn = Slide()
+            slideIn.slideEdge = Gravity.TOP
+            popupWindow.enterTransition = slideIn
+
+            // Slide animation for popup window exit transition
+            val slideOut = Slide()
+            slideOut.slideEdge = Gravity.RIGHT
+            popupWindow.exitTransition = slideOut
+
+        }
 
 
-            view.thecross.setOnClickListener {
-                popupWindow.dismiss()
-            }
+        TransitionManager.beginDelayedTransition(root_layout_search_activity)
+        popupWindow.showAtLocation(
+            root_layout_search_activity, // Location to display popup window
+            Gravity.CENTER, // Exact position of layout to display popup
+            0, // X offset
+            0 // Y offset
+        )
 
+
+        view.thecross.setOnClickListener {
+            popupWindow.dismiss()
         }
 
 
     }
 
-    fun saveDataGsonFromSearchAcivityToResultActivity(datas: MutableList<MutableList<String>>) {
-
-        val sharedPreferences = getSharedPreferences("shared preferences data Gson", MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        val gson = Gson()
-        val json = gson.toJson(datas)
-        editor.putString("task list", json)
-        editor.apply()
-
-        Log.i("SearchActivity", " TOPTOPTOP le fameux Json : $json")
-    }
-
-//    fun retrieveDataGsonFromSearchActivityToResultActivity (){
-//    val sharedPreferences = getSharedPreferences("shared preferences data Gson", MODE_PRIVATE)
-//        val gson = Gson()
-//        val json = sharedPreferences.getString("task list", null)
-//     //   val type = object: TypeToken<Muta> {}.getType()
-//        var resultat = gson.fromJson(json, type)
-//}
 
 }
 
