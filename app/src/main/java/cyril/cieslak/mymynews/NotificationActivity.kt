@@ -36,20 +36,12 @@ class NotificationActivity : AppCompatActivity() {
     companion object {
         val TEXT_SIZE_ZERO = 0
         val TEXT_SIZE_ONE = 1
-        val CHANNEL_ID = "channel_ID"
+
 
     }
 
 
     var editTextSize = TEXT_SIZE_ZERO
-
-
-    lateinit var checkedArt: String
-    lateinit var checkedPolitics: String
-    lateinit var checkedBusiness: String
-    lateinit var checkedSport: String
-    lateinit var checkedEntrepreneurs: String
-    lateinit var checkedTravel: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,7 +118,7 @@ class NotificationActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
 
-        }
+            }
 
 
         })
@@ -142,17 +134,6 @@ class NotificationActivity : AppCompatActivity() {
         switch_notification_enable.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
 
-                // ---- Dates for the Notification Search ---- //
-                val sdf = SimpleDateFormat("yyyyMMdd")
-                var todayInMilliSeconds = Date().time
-                var yesterdayInMilliSeconds = todayInMilliSeconds - 86400000
-
-                val today = sdf.format(todayInMilliSeconds)
-                val yesterday = sdf.format(yesterdayInMilliSeconds)
-
-                Log.i("dateToday", " today is : $today and yesterday was $yesterday")
-
-
                 // External class "termsForResearchAPi()" with 2 functions to collect the editText and the Checkbox checked
                 var stringTermsForResearchApi: String = termsForResearchApi().termsForR(
                     checkBoxArts,
@@ -165,52 +146,13 @@ class NotificationActivity : AppCompatActivity() {
                 var queryText: String = termsForResearchApi().query(editTextForSearch)
 
 
-                val stringForRequest =
-                    "https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=${yesterday}&end_date=$today&q=$queryText&fq=news_desk($stringTermsForResearchApi)&sort=relevance&api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
-                Log.i("Textes", "$stringForRequest")
+                // CLASS AND FUNCTION TO SAVE THE StringForRequest
+               // SharedPreference(this).save("String_for_notification", "$stringForRequest")
 
-                // Save the StringForRequest
-                saveData(stringForRequest)
-                val saveStringForRequest = getData()
+                SharedPreference(this).save("checkbox_terms_For_Notification_request", "$stringTermsForResearchApi")
+                SharedPreference(this).save("queryText_For_Notification_request", "$queryText")
 
 
-                /// ----- Downloading the datas from the server ---- ////
-                val jsonDataPreview =
-                    JSONDownloaderResultSearchActivity(this, saveStringForRequest).execute().get()
-                Log.i("Textes", " la string to Parse : $jsonDataPreview")
-
-
-                /// ---- Parse The datas ---- ///
-                var datas = parseDatasNotification().parseDatasFromApi(jsonDataPreview)
-                Log.i("Textes", "voici les données récupérrées : $datas")
-
-
-                /// --- Build the Notification --- ///
-
-                fun sendNotification() {
-                    //Get an instance of NotificationManager//
-                    val mBuilder = NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
-                        .setContentTitle("New York Times")
-                        .setContentText("You have $datas new articles to read ")
-                    // Gets an instance of the NotificationManager service//
-                    val mNotificationManager =
-                        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    // When you issue multiple notifications about the same type of event,
-                    // it’s best practice for your app to try to update an existing notification
-                    // with this new information, rather than immediately creating a new notification.
-                    // If you want to update this notification at a later date, you need to assign it an ID.
-                    // You can then use this ID whenever you issue a subsequent notification.
-                    // If the previous notification is still visible, the system will update this existing notification,
-                    // rather than create a new one. In this example, the notification’s ID is 001//
-                    NotificationManager.IMPORTANCE_DEFAULT
-
-                    mNotificationManager.notify(1, mBuilder.build())
-
-                }
-
-                // Launch Notification
-                sendNotification()
 
                 Log.i("textes", "La notification est activée par le bouton switch")
             } else {
@@ -223,26 +165,6 @@ class NotificationActivity : AppCompatActivity() {
         }
 
 
-    }
-
-
-    // Saving in Shared Preferences the Last StringForRequest created //
-    fun saveData(stringForRequest: String) {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE) ?: return
-        with(sharedPref.edit()) {
-            putString("stringForRequest", "$stringForRequest")
-            apply()
-        }
-    }
-
-    // Retrieving the last stringForRequest saved into Shared Preferences
-    fun getData(): String {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE) ?: return ""
-        val strStringForRequest = sharedPref.getString("stringForRequest", "")
-        val strForStringForRequest = strStringForRequest.toString()
-        //  Toast.makeText(this, " Voici la string sauvée en SharedPreferences : $str_stringForRequest", Toast.LENGTH_LONG).show()
-        Log.i("NotificationActivity", " Voici la string sauvée : $strStringForRequest")
-        return strForStringForRequest
     }
 
 }
