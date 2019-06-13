@@ -1,9 +1,6 @@
 package cyril.cieslak.mymynews.Fragments
 
 
-import android.app.ProgressDialog
-import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
@@ -18,6 +15,7 @@ import cyril.cieslak.mymynews.Parsers.parseDatas
 
 
 import cyril.cieslak.mymynews.R
+import cyril.cieslak.mymynews.UtilsClass.JSONDownloader
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
@@ -56,8 +54,7 @@ class FragmentSports : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     val jsonSports = "https://api.nytimes.com/svc/topstories/v2/sports.json?api-key=92Nbf4KeZSKhJXGm5QA3eTgNJjFW61gW"
 
 
-
-    lateinit var swipeRefreshLayout : SwipeRefreshLayout
+    lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
 
     override fun onCreateView(
@@ -76,7 +73,7 @@ class FragmentSports : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // to get the String JSonData, we use the class JSONDownloaderSport
-        var jsonDataPreview = JSONDownloaderSport(context!!, jsonSports).execute().get()
+        var jsonDataPreview = JSONDownloader(context!!, jsonSports).execute().get()
 
 
         // To Parse the result of the JSONDownloadSport using the external CLass parseDatas() which include the method parseDatasFromApi
@@ -91,181 +88,10 @@ class FragmentSports : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     }
 
-    class TopStoryData(
-        private var m_title: String,
-        private var m_section: String,
-        private var m_subsection: String,
-        private var m_updated_date: String
-    ) {
-
-        fun getTitle(): String {
-            return m_title
-        }
-
-        fun getSection(): String {
-            return m_section
-        }
-
-        fun getSubsection(): String {
-            return m_subsection
-        }
-
-        fun getUpdated_Date(): String {
-            return m_updated_date
-        }
-    }
-
-
-    @Suppress("DEPRECATION")
-    class JSONDownloaderSport(private var c: Context, private var jsonSports: String) :
-        AsyncTask<Void, Void, String>() {
-
-
-        private lateinit var pd: ProgressDialog
-        lateinit var bingo: String
-
-
-        // Connect to NetWork via HTTPURLConnection
-        // ***
-
-        // ***
-        private fun connect(jsonSports: String): Any {
-
-            try {
-                val url = URL(jsonSports)
-                val con = url.openConnection() as HttpURLConnection
-
-                // Con Props
-
-                con.requestMethod = "GET"
-                con.connectTimeout = 15000
-                con.readTimeout = 15000
-                con.doInput = true
-
-                return con
-            } catch (e: MalformedURLException) {
-                e.printStackTrace()
-                return "URL ERROR" + e.message
-
-            } catch (e: IOException) {
-                e.printStackTrace()
-                return "CONNECT ERROR" + e.message
-
-            }
-
-        }
-
-        // ***
-        // Download JsonData
-        // ***
-        private fun download(): String {
-
-            val connection = connect(jsonSports)
-            if (connection.toString().startsWith("Error")) {
-                return connection.toString()
-            }
-            // DOWNLOAD
-            try {
-                val con = connection as HttpURLConnection
-                // if response is HTTP OK
-                if (con.responseCode == 200) {
-                    // GET INPUT FROM STREAM
-                    val `is` = BufferedInputStream(con.inputStream)
-                    val br = BufferedReader(InputStreamReader(`is`))
-
-                    val jsonData = StringBuffer()
-                    var line: String?
-
-                    do {
-                        line = br.readLine()
-
-                        if (line == null) {
-                            break
-                        }
-                        jsonData.append(line + "\n")
-
-                    } while (true)
-
-                    // CLOSING RESOURCES
-                    br.close()
-                    `is`.close()
-
-
-                    // RETURN JSON
-                    return jsonData.toString()
-
-
-                } else {
-                    return "Error" + con.responseMessage
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-                return "Error" + e.message
-            }
-
-
-        }
-
-        // SHOW DIALOG WHILE DOWNLOADING DATAS
-        override fun onPreExecute() {
-            super.onPreExecute()
-
-            pd = ProgressDialog(c)
-            pd.setTitle("Download Json")
-            pd.setMessage("Downloading... Please wait...")
-            pd.show()
-        }
-
-        // DOWNLOADING IN BACKGROUND
-        override fun doInBackground(vararg Voids: Void): String {
-            return download()
-        }
-
-        // When BACKGROUNDWORK is finished, Dismiss Dialog and Pass Datas to JSONParser
-        override fun onPostExecute(jsonData: String) {
-            super.onPostExecute(jsonData)
-
-            pd.dismiss()
-            if (jsonData.startsWith("URL ERROR")) {
-                val error = jsonData
-                Toast.makeText(c, error, Toast.LENGTH_LONG).show()
-                Toast.makeText(
-                    c,
-                    "MOST PROBABLY THE APP CANNOT CONNECT DUE TO WRONG URL SINCE MALFORMEDURLEXCEPTION WAS RAISED",
-                    Toast.LENGTH_LONG
-                ).show()
-
-            } else if (jsonData.startsWith("CONNECT ERROR")) {
-                val error = jsonData
-                Toast.makeText(c, error, Toast.LENGTH_LONG).show()
-                Toast.makeText(
-                    c,
-                    "MOST PROBABLY THE APP CANNOT CONNECT TO ANY NETWORK SINCE IOEXCEPTION WAS RAISED",
-                    Toast.LENGTH_LONG
-                ).show()
-
-            } else {
-                // PARSE
-//                Toast.makeText(
-//                    c,
-//                    "Network Connection and Download Succesfull. Now Attempting to Parse",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//                bingo = jsonData
-//                Toast.makeText(c, "$bingo", Toast.LENGTH_LONG).show()
-
-                // JSONParser(c, jsonData, myGridView).execute()
-            }
-
-
-        }
-
-
-    }
     override fun onRefresh() {
-        Toast.makeText(context, "OnRefresh Pulled", Toast.LENGTH_SHORT).show()
-        JSONDownloaderSport(context!!, jsonSports).execute()
-        if(swipeRefreshLayout.isRefreshing()){
+    //    Toast.makeText(context, "OnRefresh Pulled", Toast.LENGTH_SHORT).show()
+        JSONDownloader(context!!, jsonSports).execute()
+        if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false)
         }
     }
