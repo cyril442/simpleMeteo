@@ -16,9 +16,25 @@ class SharedPreference(val context: Context) {
         editor!!.commit()
     }
 
+    fun saveLong(KEY_NAME: String, text: Long) {
+
+        val editor: SharedPreferences.Editor = sharedPref.edit()
+
+        editor.putLong(KEY_NAME, text)
+
+        editor!!.commit()
+    }
+
     fun getValueString(KEY_NAME: String): String? {
 
         return sharedPref.getString(KEY_NAME, null)
+
+
+    }
+
+    fun getValueLong(KEY_NAME: String): Long? {
+
+        return sharedPref.getLong(KEY_NAME, 0)
 
 
     }
