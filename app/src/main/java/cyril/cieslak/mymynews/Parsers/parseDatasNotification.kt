@@ -13,7 +13,6 @@ class parseDatasNotification() {
 
         var json = jsonDataPreview
 
-
         try {
 
             var jo: JSONObject
@@ -31,7 +30,6 @@ class parseDatasNotification() {
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-
         return datas
     }
 }

@@ -4,7 +4,7 @@ import cyril.cieslak.mymynews.Fragments.FragmentMostPopular
 import org.json.JSONException
 import org.json.JSONObject
 
-class parseDatasMostPopular () {
+class parseDatasMostPopular() {
 
 
     val YEAR_MONTH_DAY = 10
@@ -13,8 +13,8 @@ class parseDatasMostPopular () {
     val LAST_TWO = 2
     val FIRST_ELEMENT_OF_THE_INDEX = 0
     val RANK = " > Number "
-    val DUMB_PICTURE_WHEN_NO_PIC_TO_DOWNLOAD = "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
-
+    val DUMB_PICTURE_WHEN_NO_PIC_TO_DOWNLOAD =
+        "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
 
 
     var datas = mutableListOf(
@@ -38,10 +38,8 @@ class parseDatasMostPopular () {
     )
 
 
-    fun parseDatasFromApi(jsonDataPreview: String) : MutableList<MutableList<String>> {
+    fun parseDatasFromApi(jsonDataPreview: String): MutableList<MutableList<String>> {
 
-//        val inputStream: InputStream = this.assets.open("dataFake.json")
-//        var json = inputStream.bufferedReader().use { it.readText() }
 
         var json = jsonDataPreview
 
@@ -50,7 +48,6 @@ class parseDatasMostPopular () {
 
             var jo: JSONObject
             datas.clear()
-            var data: FragmentMostPopular.TopStoryData
 
             jo = JSONObject(json)
 
@@ -68,10 +65,11 @@ class parseDatasMostPopular () {
                 val urlArticle = jo.getString("url")
 
                 //***--- PREPARATION OF THE SUBSECTION TO PRINT with a " > " before the texte to print---***//
-                var viewsReadyToPrint : String
+                var viewsReadyToPrint: String
                 when (views) {
-                    0 ->  viewsReadyToPrint = views as String
-                    else -> viewsReadyToPrint = "$RANK$views" }
+                    0 -> viewsReadyToPrint = views as String
+                    else -> viewsReadyToPrint = "$RANK$views"
+                }
                 //***--------------------------------***//
 
                 //***--- FORMATTING THE DATE ---***//
@@ -93,24 +91,19 @@ class parseDatasMostPopular () {
                 var url = jem.getString("url")
 
                 //***--- GET AN IMAGE EVEN WHEN MULTIMEDIA IS EMPTY  ---**//
-                var urlToPrint : String
+                var urlToPrint: String
                 when (url) {
                     "" -> urlToPrint = DUMB_PICTURE_WHEN_NO_PIC_TO_DOWNLOAD
-                    else -> urlToPrint = url }
-
+                    else -> urlToPrint = url
+                }
 
                 val data = mutableListOf<String>(section, viewsReadyToPrint, title, dateToPrint, urlToPrint, urlArticle)
                 datas.add(data)
-
-
-
             }
-
             return datas
 
         } catch (e: JSONException) {
             e.printStackTrace()
-
         }
         return datas
     }

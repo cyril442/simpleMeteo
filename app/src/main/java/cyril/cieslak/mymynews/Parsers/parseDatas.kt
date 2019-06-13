@@ -4,7 +4,7 @@ import cyril.cieslak.mymynews.Fragments.FragmentTopStories
 import org.json.JSONException
 import org.json.JSONObject
 
-class parseDatas () {
+class parseDatas() {
 
 
     val YEAR_MONTH_DAY = 10
@@ -12,7 +12,8 @@ class parseDatas () {
     val FIRST_FOUR = 4
     val LAST_TWO = 2
     val FIRST_ELEMENT_OF_THE_INDEX = 0
-    val DUMB_PICTURE_WHEN_NO_PIC_TO_DOWNLOAD = "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
+    val DUMB_PICTURE_WHEN_NO_PIC_TO_DOWNLOAD =
+        "https://i5.photobucket.com/albums/y152/courtney210/wave-bashful_zps5ab77563.jpg"
 
     var datas = mutableListOf(
         mutableListOf<String>(
@@ -35,10 +36,8 @@ class parseDatas () {
     )
 
 
-    fun parseDatasFromApi(jsonDataPreview: String) : MutableList<MutableList<String>> {
+    fun parseDatasFromApi(jsonDataPreview: String): MutableList<MutableList<String>> {
 
-//        val inputStream: InputStream = this.assets.open("dataFake.json")
-//        var json = inputStream.bufferedReader().use { it.readText() }
 
         var json = jsonDataPreview
 
@@ -47,7 +46,6 @@ class parseDatas () {
 
             var jo: JSONObject
             datas.clear()
-            var data: FragmentTopStories.TopStoryData
 
             jo = JSONObject(json)
 
