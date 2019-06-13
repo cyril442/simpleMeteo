@@ -25,35 +25,14 @@ import kotlin.properties.Delegates.observable
 class CalendarFragment : Fragment() {
 
     private var sharedViewModel: SharedViewModel? = null
-
     lateinit var listener: CalendarFragmentListener
 
 
     var entryDate: String by Delegates.observable("11111111") { property, oldValue, newValue ->
-//        Toast.makeText(context, " the old value was : $oldValue and the new one is : $newValue", Toast.LENGTH_SHORT)
-////            .show()
-}
-
-
-
-
-    var endDate: String by Delegates.observable("20190404") {property, oldValue, newValue ->
-  //      Toast.makeText(context, " the old value was : $oldValue and the new one is : $newValue", Toast.LENGTH_SHORT).show()
     }
 
- //   lateinit var endDate: String
-
-//    fun newInstanceAfterDateChange() : String{
-//
-//        var endDate: String by Delegates.observable("22222222") {property, oldValue, newValue ->
-//            //      Toast.makeText(context, " the old value was : $oldValue and the new one is : $newValue", Toast.LENGTH_SHORT).show()
-//        }
-//        return endDate
-//    }
-
-
-
-
+    var endDate: String by Delegates.observable("20190404") { property, oldValue, newValue ->
+    }
 
     companion object {
         fun newInstance(): CalendarFragment {
@@ -63,7 +42,6 @@ class CalendarFragment : Fragment() {
         }
 
     }
-
 
 
     override fun onCreateView(
@@ -78,13 +56,11 @@ class CalendarFragment : Fragment() {
 
         // Creation of the ViewModel into the scope
         activity?.let {
-            /**
-             *  create view model in activity scope
-             */
+
             sharedViewModel = ViewModelProviders.of(it).get(SharedViewModel::class.java)
         }
 
-       // 1) Calendar
+        // 1) Calendar
 
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -125,7 +101,7 @@ class CalendarFragment : Fragment() {
 
                     sharedViewModel?.inputEntryDate?.postValue(entryDate)
 
-                    Toast.makeText(activity, """$mDay - ${mMonth} - $mYear""", Toast.LENGTH_SHORT).show()
+                    //    Toast.makeText(activity, """$mDay - ${mMonth} - $mYear""", Toast.LENGTH_SHORT).show()
                 }, year, month, day)
 
 
@@ -166,7 +142,7 @@ class CalendarFragment : Fragment() {
 
                 sharedViewModel?.inputEndDate?.postValue(endDate)
 
-                Toast.makeText(activity, """$mDay - ${mMonth} - $mYear""", Toast.LENGTH_SHORT).show()
+                //   Toast.makeText(activity, """$mDay - ${mMonth} - $mYear""", Toast.LENGTH_SHORT).show()
             }, year, month, day)
             //show dialog
             dateEnd.show()
@@ -179,7 +155,6 @@ class CalendarFragment : Fragment() {
 
 
     }
-
 
 
     override fun onAttach(context: Context?) {
@@ -200,16 +175,14 @@ class CalendarFragment : Fragment() {
     }
 
     interface CalendarFragmentListener {
-        fun onDateBegin(entryDate : String)  {
+        fun onDateBegin(entryDate: String) {
 
         }
+
         fun onDateEnd(endDate: String) {}
 
 
     }
-
-
-
 
 
 }
