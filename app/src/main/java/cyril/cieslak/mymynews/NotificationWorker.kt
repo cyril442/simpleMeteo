@@ -1,58 +1,53 @@
 package cyril.cieslak.mymynews
 
-import android.app.Activity
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.Context.*
-import android.content.SharedPreferences
 import android.graphics.Color
-import android.os.Build
 import android.support.v4.app.NotificationCompat
-import android.support.v4.content.ContextCompat.*
 import android.util.Log
 import androidx.work.Worker
-import cyril.cieslak.mymynews.NotificationActivity
-import cyril.cieslak.mymynews.Parsers.parseDatas
+import cyril.cieslak.mymynews.NotificationActivity.Companion.ENABLE
+import cyril.cieslak.mymynews.NotificationActivity.Companion.KEY_NAME_CHECKBOX_TERMS_FOR_NOTIFICATION_REQUEST
+import cyril.cieslak.mymynews.NotificationActivity.Companion.KEY_NAME_QUERYTEXT_FOR_NOTIFICATION_REQUEST
 import cyril.cieslak.mymynews.Parsers.parseDatasNotification
 import cyril.cieslak.mymynews.UtilsClass.JSONDownloaderNotification
-import cyril.cieslak.mymynews.UtilsClass.JSONDownloaderResultSearchActivity
-import kotlinx.android.synthetic.main.fragment_notification_enable.*
-import java.nio.channels.Channel
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class NotificationWorker() : Worker() {
 
+    val TWENTY_FOUR_HOURS_IN_MILLISECONDS = 86400000 // 900000 pour 15 minutes
+    val ZERO_LONG = 0
+
 
     override fun doWork(): Result {
 
-        try {
-
-
-            Log.i("testWorker", "Starting Sleep work")
-            Thread.sleep(2000)
-            var threadPassed = "ThreadPassed"
-            Log.i("testWorker", "Sleep work finished")
-
-        } catch (e: Exception) {
-            return Result.FAILURE
-        }
-
-        try {
-
-            Log.i("testWorker", "Starting NewsNotification")
-            //   notificationActivity.newsNotificationOn()
-            // retrievedNewsNotificationsOn()
-            val expensive = doExpensiveCalculation()
-            Log.i("testWorker", "expensive : $expensive")
-            Log.i("testWorker", "NewsNotification Finished")
-
-        } catch (e: Exception) {
-            return Result.FAILURE
-        }
+//        try {
+//
+//
+//            Log.i("testWorker", "Starting Sleep work")
+//            Thread.sleep(2000)
+//            var threadPassed = "ThreadPassed"
+//            Log.i("testWorker", "Sleep work finished")
+//
+//        } catch (e: Exception) {
+//            return Result.FAILURE
+//        }
+//
+//        try {
+//
+//            Log.i("testWorker", "Starting NewsNotification")
+//            //   notificationActivity.newsNotificationOn()
+//            // retrievedNewsNotificationsOn()
+//            val expensive = doExpensiveCalculation()
+//            Log.i("testWorker", "expensive : $expensive")
+//            Log.i("testWorker", "NewsNotification Finished")
+//
+//        } catch (e: Exception) {
+//            return Result.FAILURE
+//        }
 
         try {
 
@@ -60,7 +55,7 @@ class NotificationWorker() : Worker() {
             // ---- Dates for the Notification Search ---- //
             val sdf = SimpleDateFormat("yyyyMMdd")
             var todayInMilliSeconds = Date().time
-            var yesterdayInMilliSeconds = todayInMilliSeconds - 86400000
+            var yesterdayInMilliSeconds = todayInMilliSeconds - TWENTY_FOUR_HOURS_IN_MILLISECONDS
 
             val today = sdf.format(todayInMilliSeconds)
             val yesterday = sdf.format(yesterdayInMilliSeconds)
@@ -70,12 +65,12 @@ class NotificationWorker() : Worker() {
 
             // ---- terms For Research (CheckBox)retrieved from SharedPreferences ---- //
             val stringTermsForResearchApi =
-                SharedPreference(this.applicationContext).getValueString("checkbox_terms_For_Notification_request")
+                SharedPreference(this.applicationContext).getValueString(KEY_NAME_CHECKBOX_TERMS_FOR_NOTIFICATION_REQUEST)
             Log.i("testWorker", " checkbox_terms_For_Notification_request : $stringTermsForResearchApi")
 
             // ---- terms For Research (Text Input) retrieved from SharedPreferences ---- //
             val queryText =
-                SharedPreference(this.applicationContext).getValueString("queryText_For_Notification_request")
+                SharedPreference(this.applicationContext).getValueString(KEY_NAME_QUERYTEXT_FOR_NOTIFICATION_REQUEST)
             Log.i("testWorker", " checkbox_terms_For_Notification_request : $queryText")
 
 
@@ -95,9 +90,29 @@ class NotificationWorker() : Worker() {
             Log.i("testWorker", "voici les données récupérrées AFTER PARSING : $datas")
 
 
-            // Launch Notification
-            sendNotification(datas)
 
+            // Launch or Not the Notification:
+            // ---- terms For Research (CheckBox)retrieved from SharedPreferences ---- //
+            val statusSwitchButton: String? =
+                SharedPreference(this.applicationContext).getValueString(NotificationActivity.SWITCH_BUTTON_STATUS)
+            Log.i("testWorker", " STATUS SWITCH BUTTON : $statusSwitchButton")
+
+            var lastSwitchedOnSwitchButton = SharedPreference(this.applicationContext).getValueLong(NotificationActivity.LAST_SWITCH_ACTION_SAVED) as Long
+            val actualTimeStamp = Date().time
+
+
+            when(lastSwitchedOnSwitchButton.toInt() == ZERO_LONG)  {
+                true -> lastSwitchedOnSwitchButton = actualTimeStamp
+            }
+            val timePassedSinceLastSwitchOn = actualTimeStamp - lastSwitchedOnSwitchButton
+
+            val isEnoughTimePassed : Boolean = timePassedSinceLastSwitchOn > TWENTY_FOUR_HOURS_IN_MILLISECONDS
+
+            if (isEnoughTimePassed && (statusSwitchButton == ENABLE)) {
+
+                // Launch Notification
+                sendNotification(datas)
+            }
 
         } catch (e: Exception) {
             return Result.FAILURE
