@@ -1,15 +1,9 @@
 package cyril.cieslak.mymynews
 
-import android.app.ProgressDialog
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.os.AsyncTask
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -22,29 +16,16 @@ import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import cyril.cieslak.mymynews.Parsers.parseDatasResultSearchActivity
 import cyril.cieslak.mymynews.Utils.CalendarFragment
-import cyril.cieslak.mymynews.UtilsClass.JSONDownloaderResultSearchActivity
+import cyril.cieslak.mymynews.UtilsClass.JSONDownloader
 import cyril.cieslak.mymynews.UtilsClass.checkBoxEmptyOrNot
 import cyril.cieslak.mymynews.UtilsClass.termsForResearchApi
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_result_search.*
 import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.custom_popup.*
 import kotlinx.android.synthetic.main.custom_popup.view.*
 import kotlinx.android.synthetic.main.fragment_check_box.*
 import kotlinx.android.synthetic.main.fragment_search_button.*
-import java.io.BufferedInputStream
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.MalformedURLException
-import java.net.URL
 import kotlin.properties.Delegates
 
 class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentListener {
@@ -126,9 +107,10 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
                         checkBoxPolitics.isEnabled = true
                         checkBoxSport.isEnabled = true
                         checkBoxTravel.isEnabled = true
+
+
                     }
                 }
-
 
             }
 
@@ -155,21 +137,21 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
         val sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
 
         var entryDateAfterViewModel: String by Delegates.observable(INITIAL_ENTRY_DATE) { property, oldValue, newValue ->
-            Toast.makeText(
-                this,
-                " the old value was : $oldValue and the new one is ENTRYDATEAFTERVIEWMODEL : $newValue",
-                Toast.LENGTH_SHORT
-            )
-                .show()
+            //            Toast.makeText(
+//                this,
+//                " the old value was : $oldValue and the new one is ENTRYDATEAFTERVIEWMODEL : $newValue",
+//                Toast.LENGTH_SHORT
+//            )
+//                .show()
         }
 
         var endDateAfterViewModel: String by Delegates.observable(INITIAL_END_DATE) { property, oldValue, newValue ->
-            Toast.makeText(
-                this,
-                " the old value was : $oldValue and the new one is ENDDATEATERVIEWMODEL : $newValue",
-                Toast.LENGTH_SHORT
-            )
-                .show()
+            //            Toast.makeText(
+//                this,
+//                " the old value was : $oldValue and the new one is ENDDATEATERVIEWMODEL : $newValue",
+//                Toast.LENGTH_SHORT
+//            )
+//                .show()
         }
 
 
@@ -215,7 +197,7 @@ class SearchActivity : AppCompatActivity(), CalendarFragment.CalendarFragmentLis
             Log.i("Textes", "$stringForRequest")
 
 
-            var jsonDataPreview = JSONDownloaderResultSearchActivity(this, stringForRequest).execute().get()
+            var jsonDataPreview = JSONDownloader(this, stringForRequest).execute().get()
 
 //
             var intent = Intent(button.context, ResultSearchActivity::class.java)
