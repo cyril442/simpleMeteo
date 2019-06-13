@@ -13,7 +13,7 @@ import java.net.MalformedURLException
 import java.net.URL
 
 @Suppress("DEPRECATION")
-class JSONDownloaderResultSearchActivity(private var c: Context, private var jsonResultSearchActivity: String) :
+class JSONDownloader(private var c: Context, private var jsonResultSearchActivity: String) :
     AsyncTask<Void, Void, String>() {
 
 
@@ -65,9 +65,11 @@ class JSONDownloaderResultSearchActivity(private var c: Context, private var jso
             val con = connection as HttpURLConnection
             // if response is HTTP OK
             if (con.responseCode == 200) {
+
                 // GET INPUT FROM STREAM
                 val `is` = BufferedInputStream(con.inputStream)
                 val br = BufferedReader(InputStreamReader(`is`))
+
 
                 val jsonData = StringBuffer()
                 var line: String?
@@ -142,11 +144,12 @@ class JSONDownloaderResultSearchActivity(private var c: Context, private var jso
 
         } else {
             // Ready to PARSE
-                Toast.makeText(
-                    c,
-                    "Network Connection and Download Succesfull. Now Ready to Parse",
-                    Toast.LENGTH_LONG
-                ).show()
+
+//                Toast.makeText(
+//                    c,
+//                    "Network Connection and Download Succesfull. Now Ready to Parse",
+//                    Toast.LENGTH_LONG
+//                ).show()
 
         }
 
