@@ -1,9 +1,12 @@
 package cyril.cieslak.mymynews
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -22,17 +25,17 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Switch
 import android.widget.Toast
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import cyril.cieslak.mymynews.Fragments.FragmentMostPopular
 import cyril.cieslak.mymynews.Fragments.FragmentTopStories
 import cyril.cieslak.mymynews.Fragments.FragmentSports
 import kotlinx.android.synthetic.main.activity_main.*
+import java.sql.Timestamp
+import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-
 
 
 
@@ -44,8 +47,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Color of the background
-     //   root_layout_main_activity.setBackgroundColor(Color.BLUE)
+
 
         // Page Adapter
         val adapter = MyViewPagerAdapter(supportFragmentManager)
@@ -57,11 +59,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // 1) Set the Custom Toolbar to the MainActivity
         var toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.getOverflowIcon()?.setColorFilter(Color.WHITE , PorterDuff.Mode.SRC_ATOP);
         setSupportActionBar(toolbar)
 
         // Set the MenuDrawer icon clickable
         drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         var toggle : ActionBarDrawerToggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white))
         drawer.addDrawerListener(toggle)
         toggle.syncState()
 
@@ -74,16 +78,43 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
 
+
         // Set the Notification On or off
-        val work = OneTimeWorkRequestBuilder<NotificationWorker>()
+//        val work = OneTimeWorkRequestBuilder<NotificationWorker>()
+//            .build()
+
+        // Constraints
+        val constraints = Constraints.Builder()
+            .setRequiresBatteryNotLow(true)
+            .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
 
-//        val work = PeriodicWorkRequestBuilder<NotificationWorker>(15, TimeUnit.MINUTES)
-//            .build()
+        val work = PeriodicWorkRequestBuilder<NotificationWorker>(24, TimeUnit.HOURS)
+            .setConstraints(constraints)
+            .build()
+
+
+
+
+          //  Log.i ("TimeTest", " TWENTY : $TWENTY_FOUR_HOURS_IN_SECONDS, ACtual Time : $actualTimeStamp, lastSwitchOn : $lastSwitchedOnSwitchButton, donc au total =  $timePassedSinceLastSwitchOn")
+
+//        when (timePassedSinceLastSwitchOn >= TWENTY_FOUR_HOURS_IN_MILLISECONDS && statusSwitchButton == NotificationActivity.ENABLE) {
+//                         true ->  WorkManager.getInstance().enqueue(work)
+//        }
+
+
+        WorkManager.getInstance().enqueue(work)
+
+
 
 //        WorkManager.getInstance().cancelAllWork()
-        WorkManager.getInstance().enqueue(work)
+
+//        when (statusSwitchButton && twentyHoursPassedOrNot()){
+//            NotificationActivity.ENABLE && true->  WorkManager.getInstance().enqueue(work)
+//        }
+
+
 
         WorkManager.getInstance().getStatusById(work.id)
             .observe(this, Observer { workStatus ->
@@ -109,27 +140,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId){
 
             R.id.nav_topstories -> {
-                Toast.makeText(this, "Top Stories", Toast.LENGTH_SHORT).show()
+               // Toast.makeText(this, "Top Stories", Toast.LENGTH_SHORT).show()
                 viewPager.setCurrentItem(0)
             }
 
 
             R.id.nav_mostpopular -> {
-                Toast.makeText(this, "Most Popular", Toast.LENGTH_SHORT).show()
+               // Toast.makeText(this, "Most Popular", Toast.LENGTH_SHORT).show()
                 viewPager.setCurrentItem(1)
             }
             R.id.nav_sports -> {
-                Toast.makeText(this, "Sports", Toast.LENGTH_SHORT).show()
+               // Toast.makeText(this, "Sports", Toast.LENGTH_SHORT).show()
                 viewPager.setCurrentItem(2)
             }
 
             R.id.nav_search -> {
-                Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show()
+               // Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, SearchActivity::class.java)
                 startActivity(intent)
             }
             R.id.nav_notification -> {
-                Toast.makeText(this, "Notification", Toast.LENGTH_SHORT).show()
+               // Toast.makeText(this, "Notification", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, NotificationActivity::class.java)
                 startActivity(intent)
             }
@@ -184,7 +215,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 // Each case is treated
         when (item?.itemId) {
             R.id.action_search -> {
-                Toast.makeText(this, "Search Button Clicked", Toast.LENGTH_SHORT).show()
+         //       Toast.makeText(this, "Search Button Clicked", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, SearchActivity::class.java)
                 startActivity(intent)
                 return true
