@@ -63,23 +63,14 @@ class parseDatas() {
                 val urlArticle = jo.getString("url")
 
 
-                //***--- PREPARATION OF THE SUBSECTION TO PRINT with a " > " before the texte to print---***//
-                var subsectionReadyToPrint: String
-                when (subsection) {
-                    "" -> subsectionReadyToPrint = subsection
-                    else -> subsectionReadyToPrint = " > $subsection"
-                }
-                //***--------------------------------***//
 
-                //***--- FORMATTING THE DATE ---***//
-                var date10char = updated_date.take(YEAR_MONTH_DAY)
-                var date7char = updated_date.take(YEAR_MONTH)
-                var dateYear = date10char.take(FIRST_FOUR)
-                var dateMonth = date7char.takeLast(LAST_TWO)
-                var dateDay = date10char.takeLast(LAST_TWO)
-                var dateToPrint = "$dateDay/$dateMonth/$dateYear"
-                //***--------------------------------***//
+                // See the function Below to know know i the susbestion if prepared for printing
+                val subsectionReadyToPrint = valueOfTheSubsectionReadyToPrint(subsection)
 
+
+
+                // See the function bellow transforming the string
+                val dateToPrint = whatIsTheDateToPrint(updated_date)
 
                 val jam = jo.getJSONArray("multimedia")
 
@@ -113,5 +104,33 @@ class parseDatas() {
 
         }
         return datas
+    }
+
+
+
+    fun whatIsTheDateToPrint(updated_date : String) : String {
+
+        //***--- FORMATTING THE DATE ---***//
+        var date10char = updated_date.take(YEAR_MONTH_DAY)
+        var date7char = updated_date.take(YEAR_MONTH)
+        var dateYear = date10char.take(FIRST_FOUR)
+        var dateMonth = date7char.takeLast(LAST_TWO)
+        var dateDay = date10char.takeLast(LAST_TWO)
+        var dateToPrint = "$dateDay/$dateMonth/$dateYear"
+        //***--------------------------------***//
+
+        return dateToPrint
+    }
+
+    fun valueOfTheSubsectionReadyToPrint(subsection: String): String {
+
+        //***--- PREPARATION OF THE SUBSECTION TO PRINT with a " > " before the texte to print---***//
+        var subsectionReadyToPrint: String
+        when (subsection) {
+            "" -> subsectionReadyToPrint = subsection
+            else -> subsectionReadyToPrint = " > $subsection"
+        }
+
+        return subsectionReadyToPrint
     }
 }

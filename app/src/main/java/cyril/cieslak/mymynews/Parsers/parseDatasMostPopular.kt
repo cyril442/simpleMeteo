@@ -64,22 +64,13 @@ class parseDatasMostPopular() {
                 val published_date = jo.getString("published_date")
                 val urlArticle = jo.getString("url")
 
-                //***--- PREPARATION OF THE SUBSECTION TO PRINT with a " > " before the texte to print---***//
-                var viewsReadyToPrint: String
-                when (views) {
-                    0 -> viewsReadyToPrint = views as String
-                    else -> viewsReadyToPrint = "$RANK$views"
-                }
-                //***--------------------------------***//
+                //***--- PREPARATION OF THE SUBSECTION with The Ranking of the Article---***//
+                var viewsReadyToPrint = whatIsTheRankingOfTheArticle(views)
 
-                //***--- FORMATTING THE DATE ---***//
-                var date10char = published_date.take(YEAR_MONTH_DAY)
-                var date7char = published_date.take(YEAR_MONTH)
-                var dateYear = date10char.take(FIRST_FOUR)
-                var dateMonth = date7char.takeLast(LAST_TWO)
-                var dateDay = date10char.takeLast(LAST_TWO)
-                var dateToPrint = "$dateDay/$dateMonth/$dateYear"
-                //***--------------------------------***//
+
+                // See the function from Class parseDatas.kt()
+                val dateToPrint = parseDatas().whatIsTheDateToPrint(published_date)
+
 
 
                 val jam = jo.getJSONArray("media")
@@ -107,4 +98,17 @@ class parseDatasMostPopular() {
         }
         return datas
     }
+
+    fun whatIsTheRankingOfTheArticle (views : Int) : String{
+
+        //***--- PREPARATION OF THE SUBSECTION with the Ranking of te article--***//
+        var viewsReadyToPrint: String
+        when (views) {
+            0 -> viewsReadyToPrint = views.toString()
+            else -> viewsReadyToPrint = "$RANK$views"
+        }
+        //***--------------------------------***//
+        return viewsReadyToPrint
+    }
+
 }
