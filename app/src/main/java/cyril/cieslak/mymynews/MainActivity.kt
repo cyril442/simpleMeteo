@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toolbar.getOverflowIcon()?.setColorFilter(Color.WHITE , PorterDuff.Mode.SRC_ATOP);
         setSupportActionBar(toolbar)
 
-        // Set the MenuDrawer icon clickable
+        // Set the MenuDrawer icon white and clickable
         drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         var toggle : ActionBarDrawerToggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white))
@@ -77,62 +77,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var  pager = findViewById<ViewPager>(R.id.viewPager)
 
 
-
-
-        // Set the Notification On or off
-//        val work = OneTimeWorkRequestBuilder<NotificationWorker>()
-//            .build()
-
-        // Constraints
-        val constraints = Constraints.Builder()
-            .setRequiresBatteryNotLow(true)
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-
-        val work = PeriodicWorkRequestBuilder<NotificationWorker>(24, TimeUnit.HOURS)
-            .setConstraints(constraints)
-            .build()
-
-
-
-
-          //  Log.i ("TimeTest", " TWENTY : $TWENTY_FOUR_HOURS_IN_SECONDS, ACtual Time : $actualTimeStamp, lastSwitchOn : $lastSwitchedOnSwitchButton, donc au total =  $timePassedSinceLastSwitchOn")
-
-//        when (timePassedSinceLastSwitchOn >= TWENTY_FOUR_HOURS_IN_MILLISECONDS && statusSwitchButton == NotificationActivity.ENABLE) {
-//                         true ->  WorkManager.getInstance().enqueue(work)
-//        }
-
-
-        WorkManager.getInstance().enqueue(work)
-
-
-
-//        WorkManager.getInstance().cancelAllWork()
-
-//        when (statusSwitchButton && twentyHoursPassedOrNot()){
-//            NotificationActivity.ENABLE && true->  WorkManager.getInstance().enqueue(work)
-//        }
-
-
-
-        WorkManager.getInstance().getStatusById(work.id)
-            .observe(this, Observer { workStatus ->
-            Log.i ("workStatus", "workstatus = $workStatus")
-
-                if (workStatus != null && !workStatus.state.isFinished) {
-                    Log.i("workStatus", "Not yet finished ")
-                    }
-            })
-
-//        WorkManager.getInstance().getStatusById(work.id)
-//            .observe(this, Observer { workStatus ->
-//                Log.i("workManager", "workstatus = $workStatus")
-//
-//                if (workStatus != null && !workStatus.state.isFinished) {
-//                    Log.i("workManager", "Not yet finished ")
-//                }
-//            })
 
     }
 

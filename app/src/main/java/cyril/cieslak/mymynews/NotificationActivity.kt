@@ -8,11 +8,17 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import cyril.cieslak.mymynews.UtilsClass.NotificationLauncherOrNot
 import cyril.cieslak.mymynews.UtilsClass.checkBoxEmptyOrNot
 import cyril.cieslak.mymynews.UtilsClass.termsForResearchApi
 import kotlinx.android.synthetic.main.fragment_check_box.*
 import kotlinx.android.synthetic.main.fragment_notification_enable.*
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class NotificationActivity : AppCompatActivity() {
 
@@ -23,7 +29,7 @@ class NotificationActivity : AppCompatActivity() {
         val SWITCH_BUTTON_STATUS = "switch_button_status"
         val ENABLE = "Enable"
         val DISABLE = "Disable"
-        val KEY_NAME_CHECKBOX_TERMS_FOR_NOTIFICATION_REQUEST= "checkbox_terms_For_Notification_request"
+        val KEY_NAME_CHECKBOX_TERMS_FOR_NOTIFICATION_REQUEST = "checkbox_terms_For_Notification_request"
         val KEY_NAME_QUERYTEXT_FOR_NOTIFICATION_REQUEST = "queryText_For_Notification_request"
         val LAST_SWITCH_ACTION_SAVED = "lastSwitchAction"
 
@@ -47,22 +53,22 @@ class NotificationActivity : AppCompatActivity() {
         var editTextForSearch = findViewById<EditText>(R.id.edit_query)
 
 
-        ////// Switch Button for On Off
-        val statusSwitchButton: String? =
-            SharedPreference(this.applicationContext).getValueString(NotificationActivity.SWITCH_BUTTON_STATUS)
-        Log.i("testWorker", " STATUS SWITCH BUTTON : $statusSwitchButton")
-
-        when (statusSwitchButton) {
-            ENABLE -> {
-                switch_notification_enable.isChecked = true
-                switch_notification_enable.isEnabled = true
-            }
-            DISABLE -> switch_notification_enable.isEnabled = false
-            else -> switch_notification_enable.isEnabled = false
-        }
+//        ////// Switch Button for On Off
+//        val statusSwitchButton: String? =
+//            SharedPreference(this.applicationContext).getValueString(NotificationActivity.SWITCH_BUTTON_STATUS)
+//        Log.i("testWorker", " STATUS SWITCH BUTTON : $statusSwitchButton")
+//
+//        when (statusSwitchButton) {
+//            ENABLE -> {
+//                switch_notification_enable.isChecked = true
+//                switch_notification_enable.isEnabled = true
+//            }
+//            DISABLE -> switch_notification_enable.isEnabled = false
+//            else -> switch_notification_enable.isEnabled = false
+//        }
 
         // Enable Switch Button to False at launch until there is text and check from the checkbox
-       // switch_notification_enable.isEnabled = false
+        // switch_notification_enable.isEnabled = false
 
         // Set the State of The checkbox when the NotificationActivity is OnCreate
         checkBoxArts.isEnabled = false
@@ -71,6 +77,8 @@ class NotificationActivity : AppCompatActivity() {
         checkBoxPolitics.isEnabled = false
         checkBoxSport.isEnabled = false
         checkBoxTravel.isEnabled = false
+
+        switch_notification_enable.isEnabled = false
 
         // Test Edit Text has value and At least one Checkbox is checked
         // --- EDIT TEXT VALUE --- ///
@@ -151,38 +159,46 @@ class NotificationActivity : AppCompatActivity() {
 
 
                 // CLASS AND FUNCTION TO SAVE THE StringForRequest
-               // SharedPreference(this).save("String_for_notification", "$stringForRequest")
+                // SharedPreference(this).save("String_for_notification", "$stringForRequest")
 
-                SharedPreference(this).save(KEY_NAME_CHECKBOX_TERMS_FOR_NOTIFICATION_REQUEST, "$stringTermsForResearchApi")
+                SharedPreference(this).save(
+                    KEY_NAME_CHECKBOX_TERMS_FOR_NOTIFICATION_REQUEST,
+                    "$stringTermsForResearchApi"
+                )
                 SharedPreference(this).save(KEY_NAME_QUERYTEXT_FOR_NOTIFICATION_REQUEST, "$queryText")
 
                 // To Save the status of the Button Switch to enable or disable the Worker
                 SharedPreference(this).save(SWITCH_BUTTON_STATUS, ENABLE)
 
-                // To save the exact Time when the User, validate his Notification wish by switch the switch ON
-                var lastSwitchAction = Date().time
-                Log.i("now", "$lastSwitchAction")
-
-                SharedPreference(this).saveLong(LAST_SWITCH_ACTION_SAVED, lastSwitchAction)
+//                // To save the exact Time when the User, validate his Notification wish by switch the switch ON
+//                var lastSwitchAction = Date().time
+//                Log.i("now", "$lastSwitchAction")
+//
+//                SharedPreference(this).saveLong(LAST_SWITCH_ACTION_SAVED, lastSwitchAction)
 
                 Log.i("textes", "La notification est activée par le bouton switch")
                 Toast.makeText(this, "Notifcation Enable", Toast.LENGTH_SHORT).show()
 
+                //Launching of the Function Launching the Worker
+                NotificationLauncherOrNot().launchWorker()
+
 
             } else {
-
-               // To Save the status of the Button Switch to enable or disable the Worker
-                SharedPreference(this).save(SWITCH_BUTTON_STATUS, DISABLE)
+//
+//                // To Save the status of the Button Switch to enable or disable the Worker
+//                SharedPreference(this).save(SWITCH_BUTTON_STATUS, DISABLE)
 
                 Log.i("textes", "La notification est désactivée par le bouton switch")
                 Toast.makeText(this, "Notification Disable", Toast.LENGTH_SHORT).show()
 
-
+                //Stopping the Worker
+                NotificationLauncherOrNot().stopWorker()
             }
 
         }
 
 
     }
+
 
 }

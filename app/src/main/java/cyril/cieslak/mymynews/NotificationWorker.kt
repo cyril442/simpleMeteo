@@ -91,28 +91,29 @@ class NotificationWorker() : Worker() {
 
 
 
-            // Launch or Not the Notification:
+//            // Launch or Not the Notification:
             // ---- terms For Research (CheckBox)retrieved from SharedPreferences ---- //
             val statusSwitchButton: String? =
                 SharedPreference(this.applicationContext).getValueString(NotificationActivity.SWITCH_BUTTON_STATUS)
             Log.i("testWorker", " STATUS SWITCH BUTTON : $statusSwitchButton")
-
-            var lastSwitchedOnSwitchButton = SharedPreference(this.applicationContext).getValueLong(NotificationActivity.LAST_SWITCH_ACTION_SAVED) as Long
-            val actualTimeStamp = Date().time
-
-
-            when(lastSwitchedOnSwitchButton.toInt() == ZERO_LONG)  {
-                true -> lastSwitchedOnSwitchButton = actualTimeStamp
-            }
-            val timePassedSinceLastSwitchOn = actualTimeStamp - lastSwitchedOnSwitchButton
-
-            val isEnoughTimePassed : Boolean = timePassedSinceLastSwitchOn > TWENTY_FOUR_HOURS_IN_MILLISECONDS
-
-            if (isEnoughTimePassed && (statusSwitchButton == ENABLE)) {
+//
+//            var lastSwitchedOnSwitchButton = SharedPreference(this.applicationContext).getValueLong(NotificationActivity.LAST_SWITCH_ACTION_SAVED) as Long
+//            val actualTimeStamp = Date().time
+//
+//
+//            when(lastSwitchedOnSwitchButton.toInt() == ZERO_LONG)  {
+//                true -> lastSwitchedOnSwitchButton = actualTimeStamp
+//            }
+//            val timePassedSinceLastSwitchOn = actualTimeStamp - lastSwitchedOnSwitchButton
+//
+//            val isEnoughTimePassed : Boolean = timePassedSinceLastSwitchOn > TWENTY_FOUR_HOURS_IN_MILLISECONDS
+//
+            if (statusSwitchButton == ENABLE) {
 
                 // Launch Notification
                 sendNotification(datas)
             }
+
 
         } catch (e: Exception) {
             return Result.FAILURE
