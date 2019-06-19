@@ -25,7 +25,7 @@ class JSONDownloader(private var c: Context, private var jsonResultSearchActivit
     // ***
 
     // ***
-    private fun connect(jsonResultSearchActivity: String): Any {
+     fun connect(jsonResultSearchActivity: String): Any {
 
         try {
             val url = URL(jsonResultSearchActivity)
