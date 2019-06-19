@@ -27,6 +27,9 @@ class CalendarFragment : Fragment() {
     private var sharedViewModel: SharedViewModel? = null
     lateinit var listener: CalendarFragmentListener
 
+    val ONE = 1
+    val TEN = 10
+
 
     var entryDate: String by Delegates.observable("11111111") { property, oldValue, newValue ->
     }
@@ -75,12 +78,12 @@ class CalendarFragment : Fragment() {
             val datebegin =
                 DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
 
-                    var formatedMonth: String = "" + (mMonth + 1)
-                    if (mMonth < 10) {
-                        formatedMonth = "0" + (mMonth + 1)
+                    var formatedMonth: String = "" + (mMonth + ONE)
+                    if (mMonth < TEN) {
+                        formatedMonth = "0" + (mMonth + ONE)
                     }
                     var formatedDay: String = "" + (mDay)
-                    if (mDay < 10) {
+                    if (mDay < TEN) {
                         formatedDay = "0" + (mDay)
                     }
 
@@ -116,13 +119,13 @@ class CalendarFragment : Fragment() {
         date_end_picker_button.setOnClickListener {
             val dateEnd = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
 
-                var formatedMonth: String = "" + (mMonth + 1)
-                if (mMonth < 10) {
-                    formatedMonth = "0" + (mMonth + 1)
+                var formatedMonth: String = "" + (mMonth + ONE)
+                if (mMonth < TEN) {
+                    formatedMonth = "0" + (mMonth + ONE)
                 }
 
                 var formatedDay: String = "" + (mDay)
-                if (mDay < 10) {
+                if (mDay < TEN) {
                     formatedDay = "0" + (mDay)
                 }
 
