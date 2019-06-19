@@ -23,57 +23,15 @@ class termsForResearchApi {
         checkBoxTravel: CheckBox
     ): String {
 
-        var checkedArt: String
-        var checkedPolitics: String
-        var checkedBusiness: String
-        var checkedSport: String
-        var checkedEntrepreneurs: String
-        var checkedTravel: String
+
+        var checkedArt = checkArtIsCheckedOrNot(checkBoxArts)
+        var checkedPolitics = checkPoliticsIsCheckedOrNot(checkBoxPolitics)
+        var checkedBusiness = checkBusinessIsCheckedOrNot(checkBoxBusiness)
+        var checkedSport = checkSportIsCheckedOrNot(checkBoxSport)
+        var checkedEntrepreneurs = checkEntrepreneursIsCheckedOrNot(checkBoxEntrepreneurs)
+        var checkedTravel = checkTravelIsCheckedOrNot(checkBoxTravel)
 
 
-        var artsChecked: Boolean = checkBoxArts.isChecked
-        if (artsChecked == true) {
-            checkedArt = "\"Arts\""
-        } else {
-            checkedArt = ""
-        }
-
-        val politicsChecked: Boolean = checkBoxPolitics.isChecked
-        if (politicsChecked == true) {
-            checkedPolitics = "\"Politics\""
-        } else {
-            checkedPolitics = ""
-        }
-
-        val businessChecked: Boolean = checkBoxBusiness.isChecked
-        if (businessChecked == true) {
-            checkedBusiness = "\"Business\""
-        } else {
-            checkedBusiness = ""
-        }
-
-        val sportChecked: Boolean = checkBoxSport.isChecked
-        if (sportChecked == true) {
-            checkedSport = "\"Sports\""
-        } else {
-            checkedSport = ""
-        }
-
-        val entrepreneursChecked: Boolean = checkBoxEntrepreneurs.isChecked
-        if (entrepreneursChecked == true) {
-            checkedEntrepreneurs = "\"Entrepreneurs\""
-        } else {
-            checkedEntrepreneurs = ""
-        }
-
-        val travelChecked: Boolean = checkBoxTravel.isChecked
-        if (travelChecked == true) {
-            checkedTravel = "\"Travel\""
-        } else {
-            checkedTravel = ""
-        }
-
-        //   Toast.makeText(this, "Search Button Clicked", Toast.LENGTH_SHORT).show()
 
 
         var stringWithTermsForRequest =
@@ -81,5 +39,59 @@ class termsForResearchApi {
         var termsForResearchApi = "$stringWithTermsForRequest".replace("\\s".toRegex(), "")
 
         return termsForResearchApi
+    }
+
+    fun checkArtIsCheckedOrNot (checkBoxArts: CheckBox) : String{
+        var artch: String
+        when (checkBoxArts.isChecked){
+            true -> artch = "\"Arts\""
+            false -> artch = ""
+        }
+        return artch
+    }
+
+    fun checkPoliticsIsCheckedOrNot (checkBoxPolitics: CheckBox) : String{
+        var politicsch: String
+        when (checkBoxPolitics.isChecked){
+            true -> politicsch = "\"Politics\""
+            false -> politicsch = ""
+        }
+        return politicsch
+    }
+
+    fun checkBusinessIsCheckedOrNot (checkBoxBusiness: CheckBox) : String{
+        var businessch: String
+        when (checkBoxBusiness.isChecked){
+            true -> businessch = "\"Business\""
+            false -> businessch = ""
+        }
+        return businessch
+    }
+
+    fun checkSportIsCheckedOrNot (checkBoxSport: CheckBox) : String{
+        var sportch: String
+        when (checkBoxSport.isChecked){
+            true -> sportch = "\"Sports\""
+            false -> sportch = ""
+        }
+        return sportch
+    }
+
+    fun checkEntrepreneursIsCheckedOrNot (checkBoxEntrepreneurs: CheckBox) : String{
+        var entrepreneursch: String
+        when (checkBoxEntrepreneurs.isChecked){
+            true -> entrepreneursch = "\"Entrepreneurs\""
+            false -> entrepreneursch = ""
+        }
+        return entrepreneursch
+    }
+
+    fun checkTravelIsCheckedOrNot (checkBoxTravel: CheckBox) : String{
+        var travekch: String
+        when (checkBoxTravel.isChecked){
+            true -> travekch = "\"Travel\""
+            false -> travekch = ""
+        }
+        return travekch
     }
 }
