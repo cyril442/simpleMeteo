@@ -33,6 +33,7 @@ class NotificationActivity : AppCompatActivity() {
         val KEY_NAME_QUERYTEXT_FOR_NOTIFICATION_REQUEST = "queryText_For_Notification_request"
         val LAST_SWITCH_ACTION_SAVED = "lastSwitchAction"
 
+
     }
 
 
@@ -53,10 +54,13 @@ class NotificationActivity : AppCompatActivity() {
         var editTextForSearch = findViewById<EditText>(R.id.edit_query)
 
 
+
 //        ////// Switch Button for On Off
 //        val statusSwitchButton: String? =
 //            SharedPreference(this.applicationContext).getValueString(NotificationActivity.SWITCH_BUTTON_STATUS)
 //        Log.i("testWorker", " STATUS SWITCH BUTTON : $statusSwitchButton")
+//
+//        isTheSwitchButtonOnOrNot(statusSwitchButton)
 //
 //        when (statusSwitchButton) {
 //            ENABLE -> {
@@ -136,6 +140,7 @@ class NotificationActivity : AppCompatActivity() {
         })
 
 
+
         //  add the class CHECKBOX EMPTY OR NOT /// SWITCH_NOTIFICATION_ENABLE is equal to BUTTON_SEARCH in the class "CheckBoxEmpntyOrNot"
         checkBoxEmptyOrNot().checkBoxStatus(
             switch_notification_enable, checkBoxArts, checkBoxBusiness,
@@ -185,8 +190,8 @@ class NotificationActivity : AppCompatActivity() {
 
             } else {
 //
-//                // To Save the status of the Button Switch to enable or disable the Worker
-//                SharedPreference(this).save(SWITCH_BUTTON_STATUS, DISABLE)
+                // To Save the status of the Button Switch to enable or disable the Worker
+                SharedPreference(this).save(SWITCH_BUTTON_STATUS, DISABLE)
 
                 Log.i("textes", "La notification est désactivée par le bouton switch")
                 Toast.makeText(this, "Notification Disable", Toast.LENGTH_SHORT).show()
@@ -199,6 +204,33 @@ class NotificationActivity : AppCompatActivity() {
 
 
     }
+
+    fun isTheSwitchButtonOnOrNot (statusSwitchButton : String?) {
+
+        when (statusSwitchButton) {
+            ENABLE -> switch_notification_enable.isChecked = true
+            ENABLE -> switch_notification_enable.isEnabled = true
+            DISABLE -> switch_notification_enable.isChecked = false
+            else -> switch_notification_enable.isChecked = false
+
+
+        }
+
+    }
+
+    override fun onStart() {
+
+        ////// Switch Button for On Off
+        val statusSwitchButton: String? =
+            SharedPreference(this.applicationContext).getValueString(NotificationActivity.SWITCH_BUTTON_STATUS)
+        Log.i("testWorker", " STATUS SWITCH BUTTON : $statusSwitchButton")
+
+        if (statusSwitchButton == ENABLE){
+        isTheSwitchButtonOnOrNot(statusSwitchButton)}
+
+        super.onStart()
+    }
+
 
 
 }
