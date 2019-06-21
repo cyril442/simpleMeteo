@@ -3,6 +3,11 @@ package cyril.cieslak.mymynews.Parsers
 import org.junit.Test
 
 import org.junit.Assert.*
+import android.R
+import org.mockito.junit.MockitoJUnit.rule
+import cyril.cieslak.mymynews.MainActivity
+
+
 
 class parseDatasTest {
 
@@ -60,4 +65,6 @@ class parseDatasTest {
         assertEquals(subsection, result)
 
     }
+
+
 }
