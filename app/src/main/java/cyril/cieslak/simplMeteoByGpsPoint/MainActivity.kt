@@ -257,6 +257,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         locationRequest.interval = 5000
         locationRequest.fastestInterval = 3000
         locationRequest.smallestDisplacement = 10f
+
     }
 
 
