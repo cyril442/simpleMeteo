@@ -38,6 +38,55 @@
             app:tabMode="fixed"
             app:tabGravity="fill"/>
 
+    <android.support.constraint.ConstraintLayout
+            android:id="@+id/root_coordinates"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:orientation="horizontal">
+
+        <Button
+                android:id="@+id/button_update_coordinates"
+                android:text="@string/YourCoordinates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/yourCurrentLatitude"
+                android:layout_marginLeft="10dp"
+                app:layout_constraintTop_toTopOf="@id/root_coordinates"
+                app:layout_constraintBottom_toBottomOf="@id/root_coordinates"
+                style="@style/Widget.AppCompat.Button" />
+
+
+        <TextView
+                android:id="@+id/yourCurrentLatitude"
+                android:text="49.12345"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                app:layout_constraintLeft_toRightOf="@id/button_update_coordinates"
+                app:layout_constraintRight_toRightOf="@id/yourCurrentLongitude"
+                app:layout_constraintTop_toTopOf="@id/root_coordinates"
+                app:layout_constraintBottom_toBottomOf="@id/root_coordinates"
+        />
+
+        <TextView
+                android:id="@+id/yourCurrentLongitude"
+                android:text="12.7896"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                app:layout_constraintLeft_toRightOf="@id/yourCurrentLatitude"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginRight="10dp"
+                app:layout_constraintTop_toTopOf="@id/root_coordinates"
+                app:layout_constraintBottom_toBottomOf="@id/root_coordinates"
+        />
+
+
+
+    </android.support.constraint.ConstraintLayout>
+
 
     <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"

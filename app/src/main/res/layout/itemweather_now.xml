@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:orientation="vertical">
+
+    <TextView
+            android:id="@+id/timeRange"
+            android:text="@string/now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/cityName"
+            android:layout_margin="10dp"
+            />
+
+    <TextView
+            android:id="@+id/cityName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cityName"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/timeRange"
+            app:layout_constraintRight_toLeftOf="@id/country"
+            android:layout_margin="10dp"    />
+
+    <TextView
+            android:id="@+id/country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/country"
+            android:textSize="20sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/cityName"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_margin="10dp"    />
+
+    <ImageView
+            android:id="@+id/icon_weather"
+            android:layout_width="80dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/temperature"
+            app:layout_constraintTop_toBottomOf="@id/cityName"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintHorizontal_bias="0.156" app:layout_constraintVertical_bias="0.507"/>
+
+    <TextView
+            android:id="@+id/hard_coded_temperature"
+            android:text="@string/hard_coded_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toRightOf="@id/icon_weather"
+            app:layout_constraintRight_toLeftOf="@id/speed"
+            app:layout_constraintTop_toTopOf="@id/icon_weather"
+            android:layout_marginRight="20dp"
+            app:layout_constraintHorizontal_bias="0.227"/>
+
+    <TextView
+            android:id="@+id/temperature"
+            android:text="@string/real_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/hard_coded_temperature"
+            app:layout_constraintLeft_toLeftOf="@id/hard_coded_temperature"
+            app:layout_constraintBottom_toBottomOf="@id/icon_weather"
+            app:layout_constraintRight_toRightOf="@id/hard_coded_temperature"
+    />
+
+    <TextView
+            android:id="@+id/hard_coded_wind"
+            android:text="@string/hard_coded_wind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toRightOf="@id/hard_coded_temperature"
+            app:layout_constraintRight_toRightOf="@id/country"
+            app:layout_constraintTop_toTopOf="@id/icon_weather"
+            android:layout_marginLeft="20dp"
+    />
+
+    <TextView
+            android:id="@+id/speed"
+            android:text="@string/real_wind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/hard_coded_wind"
+            app:layout_constraintLeft_toLeftOf="@id/hard_coded_wind"
+            app:layout_constraintBottom_toBottomOf="@id/icon_weather"
+            app:layout_constraintRight_toRightOf="@id/hard_coded_wind"
+    />
+
+
+</android.support.constraint.ConstraintLayout>

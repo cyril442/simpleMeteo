@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyMyNews</string>
+    <string name="app_name">simplMeteoByGpsPoint</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -21,6 +21,15 @@
 
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <string name="now">Currently in : </string>
+    <string name="cityName">cityName</string>
+    <string name="country">country</string>
+    <string name="temperature">Temperature (°C) :</string>
+    <string name="hard_coded_temperature">Temperature (°C) :</string>
+    <string name="real_temperature">37.2</string>
+    <string name="hard_coded_wind">Wind (km/h) :</string>
+    <string name="real_wind">5.2</string>
+    <string name="YourCoordinates">Update Coordinates</string>
 
 
 </resources>
